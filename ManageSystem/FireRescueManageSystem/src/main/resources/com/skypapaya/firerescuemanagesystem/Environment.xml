@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.skypapaya.firerescuemanagesystem.DAO.EnvironmentDAO">
+
+    <resultMap id="environmentResultMap" type="com.skypapaya.firerescuemanagesystem.DO.EnvironmentDO">
+        <id column="id" property="id"/>
+        <result column="thermal_image" property="thermalImage"/>
+        <result column="humidity" property="humidity"/>
+        <result column="temperature" property="temperature"/>
+        <result column="people" property="people"/>
+        <result column="fire_exist" property="fireExist"/>
+        <result column="co" property="co"/>
+        <result column="smoke" property="smoke"/>
+        <result column="risk" property="risk"/>
+        <result column="gmt_created" property="createTime"/>
+        <result column="gmt_modified" property="modifyTime"/>
+
+
+    </resultMap>
+    <insert id="insertEnvironment">
+        INSERT INTO environment (thermal_image, humidity, temperature, people, fire_exist, co, smoke, risk, address,
+                                 gmt_created,
+                                 gmt_modified)
+        VALUES (#{thermalImage}, #{humidity}, #{temperature}, #{people}, #{fireExist}, #{co}, #{smoke}, #{risk},
+                #{address}, now(),
+                now())
+    </insert>
+    <update id="update">
+        UPDATE environment
+        SET thermal_image = #{thermalImage},
+            humidity      = #{humidity},
+            temperature   = #{temperature},
+            people        = #{people},
+            fire_exist    = #{fireExist},
+            co            = #{co},
+            smoke         = #{smoke},
+            risk          = #{risk},
+            address       = #{address},
+            gmt_modified  = now()
+        WHERE id = #{id}
+    </update>
+    <delete id="delete">
+        DELETE
+        FROM environment
+        WHERE id = #{id}
+    </delete>
+
+    <select id="findAll" resultMap="environmentResultMap">
+        SELECT *
+        FROM environment
+    </select>
+
+    <select id="findById" resultMap="environmentResultMap">
+        SELECT *
+        FROM environment
+        WHERE id = #{id}
+    </select>
+    <select id="findByTime" resultType="com.skypapaya.firerescuemanagesystem.DO.EnvironmentDO">
+        SELECT *
+        FROM environment
+        WHERE gmt_created BETWEEN #{startTime} AND #{endTime}
+    </select>
+    <select id="findByCo" resultType="com.skypapaya.firerescuemanagesystem.DO.EnvironmentDO">
+        SELECT *
+        FROM environment
+        WHERE co BETWEEN #{minCo} AND #{maxCo}
+    </select>
+    <select id="findByTemperature" resultType="com.skypapaya.firerescuemanagesystem.DO.EnvironmentDO">
+        SELECT *
+        FROM environment
+        WHERE temperature BETWEEN #{minTemperature} AND #{maxTemperature}
+    </select>
+    <select id="findByProbability" resultType="com.skypapaya.firerescuemanagesystem.DO.EnvironmentDO">
+        SELECT *
+        FROM environment
+        WHERE probability BETWEEN #{minProbability} AND #{maxProbability}
+    </select>
+
+
+    <select id="page" resultMap="environmentResultMap">
+        SELECT *
+        FROM environment LIMIT #{pageNum}, #{size}
+    </select>
+    <select id="count" resultType="int">
+        SELECT COUNT(*)
+        FROM environment
+    </select>
+
+
+</mapper>
