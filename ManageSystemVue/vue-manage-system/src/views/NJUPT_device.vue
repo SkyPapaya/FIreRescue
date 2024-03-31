@@ -1,31 +1,35 @@
 <script lang="ts" setup>
 import service from "../utils/request";
 
-interface User {
+interface environment {
   device_id: string;
-  parent_device_id: string;
-  address: string;
+  thermal_image: string;
+  humidity: number;
+  temperature: number;
+  people: number;
+  fireExist: number;
+  smoke: number;
   co: number;
-  fire_exit: string;
-  fire_probability: number;
+  risk: number;
+  address: string;
+  gmtCreated: string;
+  gmtModified: string;
 }
 
 const tableRowClassName = ({
                              row,
                              rowIndex,
                            }: {
-  row: User;
+  row: environment;
   rowIndex: number;
 }) => {
-  if (row.fire_probability > 0.8 || row.co > 0.8 || row.fire_exit === "exist") {
+  if (row.risk > 0.8 || row.co > 0.8 || row.fireExist === 1) {
     return "warning-row";
   } else if (rowIndex === 3) {
     return "success-row";
   }
   return "";
 };
-
-
 const state = reactive({
   tableData: [],
   form: {}
@@ -47,13 +51,30 @@ const load = () => {
 onMounted(() => {
   load();
 });
-
 // 每三秒刷新一次数据
 setInterval(() => {
   load();
-}, 3000);
-</script>
+  checkFire()
 
+}, 10000);
+import {ElNotification} from 'element-plus'
+
+const checkFire = () => {
+  if (state.tableData.some((item: environment) => item.fireExist === 1)) {
+    ElNotification({
+      title: 'Error',
+      message: '有火情',
+      type: 'error',
+    });
+  } else if (state.tableData.some((item: environment) => item.risk > 0.8) || state.tableData.some((item: environment) => item.co > 0.8)) {
+    ElNotification({
+      title: 'Error',
+      message: '有火灾风险',
+      type: 'error',
+    });
+  }
+};
+</script>
 <style>
 .el-table .warning-row {
   --el-table-tr-bg-color: var(--el-color-warning-light-9);
@@ -101,7 +122,8 @@ setInterval(() => {
         <el-table
             :data="state.tableData"
             style="width: 100%; font-size: 20px; display: block"
-            :row-class-name="tableRowClassName">
+            :row-class-name="tableRowClassName"
+        >
 
           <el-table-column prop="fireExist" label="是否存在火源" width="180px" align="center"/>
           <el-table-column prop="temperature" label="最高温度" width="180px" align="center"/>

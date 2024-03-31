@@ -60,7 +60,7 @@ public class MqttMessageService {
 //        System.out.println("clientid: " + sign.getClientid());
 
         //使用Paho连接阿里云物联网平台
-        String port = "1883";
+        String port = "443";
         String broker = "ssl://" + productKey + ".iot-as-mqtt.cn-shanghai.aliyuncs.com" + ":" + port;
         MemoryPersistence persistence = new MemoryPersistence();
         try {
