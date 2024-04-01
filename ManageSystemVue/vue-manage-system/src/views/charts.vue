@@ -22,7 +22,7 @@
 
 <script setup lang="ts" name="basecharts">
 import areaCharts from '../charts/areaCharts.vue';
-import environmentChart from '../charts/environmentChart.vue';
+import environmentChart from '../charts/riskChart.vue';
 import typeChart from '../charts/typeChart.vue';
 import deviceChart from '../charts/device.vue';
 

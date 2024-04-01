@@ -9,6 +9,9 @@ import * as echarts from 'echarts';
 const chart = ref<HTMLDivElement | null>(null);
 type EChartsOption = echarts.EChartsOption;
 let option: EChartsOption = {
+  title: {
+    text: '设备数据'
+  },
   dataset: [
     {
       dimensions: ['name', 'value'],

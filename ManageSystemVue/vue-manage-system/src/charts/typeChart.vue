@@ -39,6 +39,7 @@ onMounted(() => {
   // 每分钟刷新一次数据
   const interval = setInterval(refreshData, 1000);
   option = {
+    title: {text: '火灾类型统计'},
     legend: {},
     tooltip: {
       trigger: 'axis',
