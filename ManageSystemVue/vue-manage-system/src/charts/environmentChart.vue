@@ -4,45 +4,47 @@
 
 <script setup lang="ts">
 import * as echarts from 'echarts';
-import {ref, onMounted} from 'vue';
+import { ref, onMounted } from 'vue';
+import { ElNotification } from "element-plus";
 
-var chartDom = document.getElementById('main');
+const chart = ref<HTMLDivElement | null>(null);
 
-var option;
+let now = new Date();
+let oneDay = 24 * 3600 * 1000;
+let data: any[] = [];
+let option: echarts.EChartsOption;
+
+// 滑动平均法处理随机数据
+let smoothedValue = 0;
+const smoothingFactor = 0.2;
 
 function randomData() {
   now = new Date(+now + oneDay);
-  value = value + Math.random() * 21 - 10;
+  let newValue = Math.random() * 100;
+  smoothedValue = smoothedValue * (1 - smoothingFactor) + newValue * smoothingFactor;
   return {
     name: now.toString(),
     value: [
       [now.getFullYear(), now.getMonth() + 1, now.getDate()].join('/'),
-      Math.round(value)
+      Math.round(smoothedValue)
     ]
   };
 }
 
-let data = [];
-let now = new Date(1997, 9, 3);
-let oneDay = 24 * 3600 * 1000;
-let value = Math.random() * 1000;
-for (var i = 0; i < 1000; i++) {
+for (var i = 0; i < 100; i++) {
   data.push(randomData());
 }
-
-const chart = ref<HTMLDivElement | null>(null);
 
 onMounted(() => {
   const myChart = echarts.init(chart.value!);
   window.addEventListener('resize', () => {
     myChart.resize();
-  })
+  });
 
   setInterval(function () {
-    for (var i = 0; i < 5; i++) {
-      data.shift();
-      data.push(randomData());
-    }
+    checkFire();
+    data.shift();
+    data.push(randomData());
     myChart.setOption({
       series: [
         {
@@ -52,12 +54,23 @@ onMounted(() => {
     });
   }, 1000);
 
-  option && myChart.setOption(option);
-})
+  myChart.setOption(option);
+});
+
+const checkFire = () => {
+  console.log(data.some((item: any) => item.value[1] ));
+  if (data.some((item: any) => item.value[1] > 80)) {
+    ElNotification({
+      title: 'Error',
+      message: '有火灾风险',
+      type: 'error',
+    });
+  }
+};
 
 option = {
   title: {
-    text: 'Dynamic Data & Time Axis'
+    text: '发生火灾的风险'
   },
   tooltip: {
     trigger: 'axis',
@@ -65,12 +78,12 @@ option = {
       params = params[0];
       var date = new Date(params.name);
       return (
-          date.getDate() +
-          '/' +
-          (date.getMonth() + 1) +
-          '/' +
-          date.getFullYear() +
-          ' : ' +
+          date.getHours() +
+          ':' +
+          (date.getMinutes()) +
+          ':' +
+          date.getSeconds() +
+          ' ' +
           params.value[1]
       );
     },
@@ -81,15 +94,25 @@ option = {
   xAxis: {
     type: 'time',
     splitLine: {
-      show: false
-    }
+      show: true
+    },
+    axisLabel: {
+      formatter: function (value: string | number | Date) {
+        let date = new Date(value);
+        return "";
+      },
+      axisLabelShow: false
+    },
+
   },
   yAxis: {
     type: 'value',
     boundaryGap: [0, '100%'],
     splitLine: {
       show: false
-    }
+    },
+    min: 0,
+    max: 100
   },
   series: [
     {
@@ -99,8 +122,5 @@ option = {
       data: data
     }
   ]
-
-}
-
-
+};
 </script>

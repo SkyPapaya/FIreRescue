@@ -10,16 +10,22 @@ type EChartsOption = echarts.EChartsOption;
 
 let option: EChartsOption;
 
-let base = +new Date(1968, 9, 3);
+let base = +new Date();
 let oneDay = 24 * 3600 * 1000;
 let date = [];
 let data = [Math.random() * 300];
+var now = new Date((base -= oneDay));
+const money = [114,450,124,187,845,126,665,425,788,115,351,251,452,321,612,351,327,368,218]
+for (let i = 1; i < 20; i++) {
+  now = new Date(base -= oneDay);
 
-for (let i = 1; i < 20000; i++) {
-  var now = new Date((base += oneDay));
   date.push([now.getFullYear(), now.getMonth() + 1, now.getDate()].join('/'));
-  data.push(Math.round((Math.random() - 0.5) * 20 + data[i - 1]));
+  data.push (money[i]);
 }
+
+// 反转日期和数据数组
+date.reverse();
+data.reverse();
 
 const chart = ref<HTMLDivElement | null>(null);
 
@@ -40,7 +46,7 @@ onMounted(() => {
     },
     title: {
       left: 'center',
-      text: 'Large Area Chart'
+      text: '火灾造成的经济损失'
     },
     toolbox: {
       feature: {
