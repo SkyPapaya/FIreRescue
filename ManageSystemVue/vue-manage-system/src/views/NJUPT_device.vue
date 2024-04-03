@@ -71,6 +71,7 @@ const checkFire = () => {
       title: 'Error',
       message: '有火灾风险',
       type: 'error',
+      duration:10000,
     });
   }
 };

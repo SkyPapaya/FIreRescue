@@ -48,16 +48,24 @@ public class Result {
     }
 
     //传输成功
-    public static Result success(){
-        return new Result("200","success");
+    public static Result success() {
+        return new Result("200", "success");
     }
 
-    public static Result success(Object data){
-        return new Result("200","success",data);
+    public static Result success(Object data) {
+        return new Result("200", "success", data);
+    }
+
+    public static Result error(String message) {
+        return new Result("500", message);
+    }
+
+    public static Result error(String code, String message) {
+        return new Result(code, message);
     }
 
     //传输失败
-    public static Result fail(){
-        return new Result("500","fail");
+    public static Result fail() {
+        return new Result("500", "fail");
     }
 }

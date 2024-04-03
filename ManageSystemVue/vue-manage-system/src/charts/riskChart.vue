@@ -10,8 +10,8 @@ import { ElNotification } from "element-plus";
 const chart = ref<HTMLDivElement | null>(null);
 
 let now = new Date();
-let oneDay = 24 * 3600 * 1000;
 let data: any[] = [];
+let xAxisData: string[] = [];
 let option: echarts.EChartsOption;
 
 // 滑动平均法处理随机数据
@@ -19,20 +19,22 @@ let smoothedValue = 0;
 const smoothingFactor = 0.2;
 
 function randomData() {
-  now = new Date(+now + oneDay);
+  now = new Date(now.getTime() + 30000); // 每次增加30秒
   let newValue = Math.random() * 100;
   smoothedValue = smoothedValue * (1 - smoothingFactor) + newValue * smoothingFactor;
   return {
-    name: now.toString(),
+    name: now.toLocaleTimeString(), // 使用时分秒作为名称
     value: [
-      [now.getFullYear(), now.getMonth() + 1, now.getDate()].join('/'),
+      now.toLocaleTimeString(),
       Math.round(smoothedValue)
     ]
   };
 }
 
 for (var i = 0; i < 100; i++) {
-  data.push(randomData());
+  const newData = randomData();
+  data.push(newData.value);
+  xAxisData.push(newData.name);
 }
 
 onMounted(() => {
@@ -43,27 +45,36 @@ onMounted(() => {
 
   setInterval(function () {
     checkFire();
+    const newData = randomData();
     data.shift();
-    data.push(randomData());
+    xAxisData.shift();
+    data.push(newData.value);
+    xAxisData.push(newData.name);
     myChart.setOption({
       series: [
         {
           data: data
         }
+      ],
+      xAxis: [
+        {
+          data: xAxisData
+        }
       ]
     });
-  }, 1000);
+  }, 10000); // 每30秒刷新一次
 
   myChart.setOption(option);
 });
 
 const checkFire = () => {
-  console.log(data.some((item: any) => item.value[1] ));
-  if (data.some((item: any) => item.value[1] > 80)) {
+  console.log(data.some((item: any) => item[1] ));
+  if (data.some((item: any) => item[1] > 80)) {
     ElNotification({
       title: 'Error',
       message: '有火灾风险',
       type: 'error',
+      duration: 10000,
     });
   }
 };
@@ -92,18 +103,11 @@ option = {
     }
   },
   xAxis: {
-    type: 'time',
+    type: 'category',
     splitLine: {
       show: true
     },
-    axisLabel: {
-      formatter: function (value: string | number | Date) {
-        let date = new Date(value);
-        return "";
-      },
-      axisLabelShow: false
-    },
-
+    data: xAxisData // 不再需要格式化为日期格式
   },
   yAxis: {
     type: 'value',

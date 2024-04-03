@@ -77,6 +77,6 @@ onMounted(() => {
     });
     option.dataset[0].source.sort((a: any, b: any) => b[1] - a[1]); // 根据第二个数据排序
     myChart.setOption(option); // 更新图表
-  }, 3000);
+  }, 10000);
 });
 </script>
