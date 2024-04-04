@@ -24,9 +24,8 @@ function randomData() {
   now = new Date(now.getTime() + 1000);
   return {
     name: now.toLocaleTimeString(),
-    value: [
-      now.toLocaleTimeString(),
-      Math.round(risk)
+    value: [now.toLocaleTimeString(),
+      risk
     ]
   };
 }
