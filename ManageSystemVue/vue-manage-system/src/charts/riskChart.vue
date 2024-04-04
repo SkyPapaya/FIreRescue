@@ -17,8 +17,6 @@ let option: echarts.EChartsOption;
 let risk;
 
 // 滑动平均法处理随机数据
-let smoothedValue = 0;
-const smoothingFactor = 0.2;
 
 const load = () => {
   service.get('environment/getTheLatest').then((res) => {
@@ -72,7 +70,6 @@ onMounted(() => {
   myChart.setOption(option);
 });
 const checkFire = () => {
-  console.log(data.some((item: any) => item[1]));
   if (data.some((item: any) => item[1] > 80)) {
     ElNotification({
       title: 'Error',

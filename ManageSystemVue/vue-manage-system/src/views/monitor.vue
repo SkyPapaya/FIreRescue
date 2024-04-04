@@ -6,7 +6,7 @@
     <div class="chart">
       <el-card :style="{ width: '480px', margin: '30px', color: distanceColor }" shadow="hover">{{
           distanceContent
-        }}
+        }} mm
       </el-card>
       <el-card :style="{ width: '480px', margin: '30px', color: actionColor }" shadow="hover">{{
           actionContent
@@ -42,7 +42,6 @@ const load = () => {
   service.get('/vital/getTheLatest').then((res) => {
     distance = res.data.distance
     active = res.data.active
-    console.log(distance)
   })
 }
 onMounted(() => {

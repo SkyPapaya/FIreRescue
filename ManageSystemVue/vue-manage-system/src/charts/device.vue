@@ -3,8 +3,9 @@
 </template>
 
 <script setup lang="ts">
-import {ref, onMounted} from 'vue';
+import { ref, onMounted } from 'vue';
 import * as echarts from 'echarts';
+import service from "../utils/request";
 
 const chart = ref<HTMLDivElement | null>(null);
 type EChartsOption = echarts.EChartsOption;
@@ -16,12 +17,12 @@ let option: EChartsOption = {
     {
       dimensions: ['name', 'value'],
       source: [
-        ['humidity', 63],
-        ['temperature', 75],
-        ['people', 15],
-        ['fire_exist', 69],
-        ['co', 25],
-        ['smoke', 43],
+        ['湿度', 0],
+        ['温度', 0],
+        ['人数', 0],
+        ['火情', 0],
+        ['CO浓度', 0],
+        ['烟雾浓度', 0],
       ]
     },
     {
@@ -65,18 +66,43 @@ let option: EChartsOption = {
     }
   }
 };
+let humidity;
+let temperature;
+let people;
+let fire;
+let co;
+let smoke;
+const load = () =>{
+  service.get('environment/getTheLatest').then((res) =>{
+    humidity = res.data.humidity;
+    temperature = res.data.temperature;
+    people =  res.data.people;
+    fire = res.data.fire;
+    co = res.data.co;
+    smoke = res.data.smoke;
+    console.log("--------" + humidity)
+
+    // 替换数据
+    option.dataset[0].source = [
+      ['湿度', humidity],
+      ['温度', temperature],
+      ['火情', fire],
+      ['CO浓度', co],
+      ['烟雾浓度', smoke],
+    ];
+  });
+}
 
 onMounted(() => {
   const myChart = echarts.init(chart.value!);
+  load(); // 加载数据
   myChart.setOption(option);
 
   // 模拟数据动态更新
   setInterval(() => {
-    option.dataset[0].source.forEach((item: any) => {
-      item[1] = Math.round(Math.random() * 100); // 更新第二个数据
-    });
+    load(); // 加载数据
     option.dataset[0].source.sort((a: any, b: any) => b[1] - a[1]); // 根据第二个数据排序
     myChart.setOption(option); // 更新图表
-  }, 10000);
+  }, 1000);
 });
 </script>

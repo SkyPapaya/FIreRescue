@@ -16,6 +16,7 @@ let signalStrength;
 const load = () => {
   service.get('/vital/getTheLatest').then((res) => {
     signalStrength = res.data.signalStrength
+    console.log("--------" + signalStrength)
   })
 
 }
@@ -24,7 +25,6 @@ onMounted(() => {
   const myChart = echarts.init(chart.value!);
   // 定义初始数据
   let value = 50;
-
   // 设置定时器，每隔一段时间更新数据
   setInterval(() => {
     // 生成一个介于-2到2之间的随机数
@@ -39,7 +39,7 @@ onMounted(() => {
         data: [signalStrength + 100]
       }]
     });
-  }, 200); // 间隔为2秒
+  }, 100); // 间隔为2秒
 
   option = {
     title: {
