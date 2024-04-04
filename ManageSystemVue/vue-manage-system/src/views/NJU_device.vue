@@ -1,3 +1,32 @@
+<template>
+  <el-container class="layout-container-demo" style="height: 100%">
+    <el-container>
+      <div style="display:block">
+        <el-table
+            :data="state.tableData"
+            style="width: 100%; font-size: 20px; display: block"
+            :row-class-name="tableRowClassName"
+        >
+
+          <el-table-column prop="humidity" label="湿度" width="180px" align="center"/>
+          <el-table-column prop="temperature" label="最高温度" width="180px" align="center"/>
+          <el-table-column prop="fire" label="是否存在火源" width="180px" align="center"/>
+          <el-table-column prop="smoke" label="烟雾浓度" width="180px" align="center"/>
+          <el-table-column prop="co" label="一氧化碳浓度" width="180px" align="center"/>
+          <el-table-column prop="risk" label="火灾风险" width="180px" align="center"/>
+        </el-table>
+      </div>
+
+    </el-container>
+    <div class="example-pagination-block"
+         style="padding-left: 10px; width: 100px;height: 50px; position: absolute; left: 10px ; bottom: 250px ">
+      <div class="example-demonstration"></div>
+      <el-pagination layout="prev, pager, next" :total="50" page-count="10"/>
+    </div>
+
+  </el-container>
+</template>
+
 <script setup lang="ts">
 import {reactive, ref, onMounted} from "vue";
 import service from "../utils/request";
@@ -10,12 +39,10 @@ interface environment {
   co: number;
   risk: number;
 }
-
 const state = reactive({
   tableData: [],
   form: {},
 });
-
 const activeIndex = ref("1");
 const activeIndex2 = ref("1");
 const count = ref(0);
@@ -94,31 +121,4 @@ import {ElNotification} from 'element-plus';
 }
 </style>
 
-<template>
-  <el-container class="layout-container-demo" style="height: 100%">
-    <el-container>
-      <div style="display:block">
-        <el-table
-            :data="state.tableData"
-            style="width: 100%; font-size: 20px; display: block"
-            :row-class-name="tableRowClassName"
-        >
 
-          <el-table-column prop="humidity" label="湿度" width="180px" align="center"/>
-          <el-table-column prop="temperature" label="最高温度" width="180px" align="center"/>
-          <el-table-column prop="fire" label="是否存在火源" width="180px" align="center"/>
-          <el-table-column prop="smoke" label="烟雾浓度" width="180px" align="center"/>
-          <el-table-column prop="co" label="一氧化碳浓度" width="180px" align="center"/>
-          <el-table-column prop="risk" label="火灾风险" width="180px" align="center"/>
-        </el-table>
-      </div>
-
-    </el-container>
-    <div class="example-pagination-block"
-         style="padding-left: 10px; width: 100px;height: 50px; position: absolute; left: 10px ; bottom: 250px ">
-      <div class="example-demonstration"></div>
-      <el-pagination layout="prev, pager, next" :total="50" page-count="10"/>
-    </div>
-
-  </el-container>
-</template>

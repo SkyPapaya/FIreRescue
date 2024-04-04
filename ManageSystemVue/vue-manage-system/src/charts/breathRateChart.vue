@@ -4,29 +4,33 @@
 
 <script setup lang="ts">
 import * as echarts from 'echarts';
-import { ref, onMounted } from 'vue';
-import { ElNotification } from "element-plus";
+import {ref, onMounted} from 'vue';
+import {ElNotification} from "element-plus";
+import service from "../utils/request";
 
 const chart = ref<HTMLDivElement | null>(null);
-
 let now = new Date();
 let data: any[] = [];
 let xAxisData: string[] = [];
 let option: echarts.EChartsOption;
 
-// 滑动平均法处理随机数据
-let smoothedValue = 0;
-const smoothingFactor = 0.2;
+let breathRate;
+const load = () => {
+  service.get('/vital/getTheLatest').then((res) => {
+    breathRate = res.data.breathRate
+    console.log(res.data)
+  })
+}
 
+//将这里的smoothedValue替换成获取到的数据
 function randomData() {
-  now = new Date(now.getTime() + 30000); // 每次增加30秒
-  let newValue = Math.random() * 100;
-  smoothedValue = smoothedValue * (1 - smoothingFactor) + newValue * smoothingFactor;
+  now = new Date(now.getTime() + 1000); // 每次增加1秒
+
   return {
     name: now.toLocaleTimeString(), // 使用时分秒作为名称
     value: [
       now.toLocaleTimeString(),
-      Math.round(smoothedValue)
+      Math.round(breathRate)
     ]
   };
 }
@@ -37,6 +41,7 @@ for (var i = 0; i < 100; i++) {
   xAxisData.push(newData.name);
 }
 
+
 onMounted(() => {
   const myChart = echarts.init(chart.value!);
   window.addEventListener('resize', () => {
@@ -44,6 +49,7 @@ onMounted(() => {
   });
 
   setInterval(function () {
+    load();
     const newData = randomData();
     data.shift();
     xAxisData.shift();
@@ -61,6 +67,9 @@ onMounted(() => {
         }
       ]
     });
+
+
+    // 更新标记点的位置
     myChart.setOption({
       graphic: [{
         type: 'text',
@@ -71,17 +80,13 @@ onMounted(() => {
           textAlign: 'center',
           fill: '#00c4ff',
           fontSize: 24
-
         }
       }]
     });
-  }, 10000); // 每10秒刷新一次
+  }, 1000); // 每1秒刷新一次
 
   myChart.setOption(option);
 });
-
-
-
 option = {
   title: {
     text: '呼吸频率'
@@ -127,8 +132,8 @@ option = {
       type: 'line',
       showSymbol: false,
       data: data,
-      lineStyle:{
-        color: '#147047'
+      lineStyle: {
+        color: '#ef3b3b'
       }
     }
   ]
