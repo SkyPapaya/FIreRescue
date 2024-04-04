@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { reactive, ref, onMounted } from "vue";
+import {reactive, ref, onMounted} from "vue";
 import service from "../utils/request";
 
 interface environment {
@@ -12,7 +12,7 @@ interface environment {
 }
 
 const state = reactive({
-  tableData:[],
+  tableData: [],
   form: {},
 });
 
@@ -29,8 +29,6 @@ const tableRowClassName = ({
 }) => {
   if (row.risk > 0.8 || row.co > 0.8 || row.fire === 1) {
     return "warning-row";
-  } else if (rowIndex === 3) {
-    return "success-row";
   }
   return "";
 };
@@ -53,7 +51,7 @@ setInterval(() => {
   load();
 }, 10000);
 
-import { ElNotification } from 'element-plus';
+import {ElNotification} from 'element-plus';
 </script>
 
 <style>

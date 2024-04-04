@@ -3,7 +3,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import {ref, onMounted} from 'vue';
 import * as echarts from 'echarts';
 
 const chart = ref<HTMLDivElement | null>(null);
@@ -27,13 +27,13 @@ let option: EChartsOption = {
     {
       transform: {
         type: 'sort',
-        config: { dimension: 'value', order: 'desc' } // 根据第二个数据进行排序
+        config: {dimension: 'value', order: 'desc'} // 根据第二个数据进行排序
       }
     }
   ],
   xAxis: {
     type: 'category',
-    axisLabel: { interval: 0, rotate: 30 }
+    axisLabel: {interval: 0, rotate: 30}
   },
   yAxis: {
     min: 0,
@@ -41,10 +41,10 @@ let option: EChartsOption = {
   },
   series: {
     type: 'bar',
-    encode: { x: 'name', y: 'value' }, // 编码修改为正确的名称
+    encode: {x: 'name', y: 'value'}, // 编码修改为正确的名称
     datasetIndex: 1,
     itemStyle: {
-      color: function(params: any) {
+      color: function (params: any) {
         const value = params.data[1]; // 获取 y 值
         if (value > 80) {
           return 'red'; // y 值大于 80 时柱状图颜色为红色
@@ -58,8 +58,8 @@ let option: EChartsOption = {
   },
   tooltip: {
     trigger: 'axis',
-    axisPointer: { type: 'shadow' },
-    formatter: function(params) {
+    axisPointer: {type: 'shadow'},
+    formatter: function (params) {
       const data = params[0].data;
       return `${data[0]}：<br/>${data[1]}`;
     }
