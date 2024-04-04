@@ -15,9 +15,11 @@
         <result column="gmt_modified" property="modifyTime"/>
     </resultMap>
 
-    <select id="getTheLasted" resultMap="environmentResultMap">
+    <select id="getTheLatest" resultMap="environmentResultMap">
         SELECT *
-        from environment LIMIT 1
+        from environment
+            ORDER BY gmt_created DESC
+                LIMIT 1
     </select>
     <insert id="insertEnvironmentDO" parameterType="com.skypapaya.firerescuemanagesystem.DO.EnvironmentDO">
         INSERT INTO environment (co, fire, humidity, risk, smoke, temperature, gmt_created, gmt_modified)

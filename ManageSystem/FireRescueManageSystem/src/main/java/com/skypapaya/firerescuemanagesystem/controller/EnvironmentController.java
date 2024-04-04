@@ -9,10 +9,10 @@ public class EnvironmentController {
     @Autowired
     EnvironmentDAO environmentDAO;
     //查询最新的一条数据
-    @GetMapping("environment/findTheLasted")
+    @GetMapping("environment/getTheLatest")
     public Result getTheLasted() {
         Result result = new Result();
-        EnvironmentDO environment = environmentDAO.getTheLasted();
+        EnvironmentDO environment = environmentDAO.getTheLatest();
         if (environment == null) {
             result.setCode("404");
             result.setMessage("没有数据");

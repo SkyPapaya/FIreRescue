@@ -1,5 +1,6 @@
 package com.skypapaya.firerescuemanagesystem.DO;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -8,7 +9,6 @@ import java.time.LocalDateTime;
 public class EnvironmentDO {
 
     Long id;
-    //String thermalImage;
     float co;
     float fire;
     float humidity;
@@ -19,14 +19,6 @@ public class EnvironmentDO {
     LocalDateTime createTime;
     LocalDateTime modifyTime;
 
-    public EnvironmentDO(float co, float fire, float humidity, float risk, float smoke, float temperature) {
-        this.co = co;
-        this.fire = fire;
-        this.humidity = humidity;
-        this.risk = risk;
-        this.smoke = smoke;
-        this.temperature = temperature;
-    }
 
     public Long getId() {
         return id;
@@ -108,12 +100,17 @@ public class EnvironmentDO {
         this.modifyTime = modifyTime;
     }
 
+    public EnvironmentDO(float co, float fire, float humidity, float risk, float smoke, float temperature) {
+        this.co = co;
+        this.fire = fire;
+        this.humidity = humidity;
+        this.risk = risk;
+        this.smoke = smoke;
+        this.temperature = temperature;
+    }
+
     public EnvironmentDO() {
 
     }
-    public EnvironmentDO getter(){
-        return this;
-    }
-
-
+    
 }
