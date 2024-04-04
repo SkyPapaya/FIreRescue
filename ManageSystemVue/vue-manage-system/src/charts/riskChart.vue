@@ -4,8 +4,9 @@
 
 <script setup lang="ts">
 import * as echarts from 'echarts';
-import { ref, onMounted } from 'vue';
-import { ElNotification } from "element-plus";
+import {ref, onMounted} from 'vue';
+import {ElNotification} from "element-plus";
+import service from "../utils/request";
 
 const chart = ref<HTMLDivElement | null>(null);
 
@@ -13,20 +14,26 @@ let now = new Date();
 let data: any[] = [];
 let xAxisData: string[] = [];
 let option: echarts.EChartsOption;
+let risk;
 
 // 滑动平均法处理随机数据
 let smoothedValue = 0;
 const smoothingFactor = 0.2;
 
+const load = () => {
+  service.get('environment/getTheLatest').then((res) => {
+    risk = res.data.risk
+  })
+}
+
+
 function randomData() {
   now = new Date(now.getTime() + 30000); // 每次增加30秒
-  let newValue = Math.random() * 100;
-  smoothedValue = smoothedValue * (1 - smoothingFactor) + newValue * smoothingFactor;
   return {
     name: now.toLocaleTimeString(), // 使用时分秒作为名称
     value: [
       now.toLocaleTimeString(),
-      Math.round(smoothedValue)
+      Math.round(risk)
     ]
   };
 }
@@ -36,13 +43,12 @@ for (var i = 0; i < 100; i++) {
   data.push(newData.value);
   xAxisData.push(newData.name);
 }
-
 onMounted(() => {
+  load()
   const myChart = echarts.init(chart.value!);
   window.addEventListener('resize', () => {
     myChart.resize();
   });
-
   setInterval(function () {
     checkFire();
     const newData = randomData();
@@ -62,13 +68,11 @@ onMounted(() => {
         }
       ]
     });
-  }, 10000); // 每30秒刷新一次
-
+  }, 1000); // 每1秒刷新一次
   myChart.setOption(option);
 });
-
 const checkFire = () => {
-  console.log(data.some((item: any) => item[1] ));
+  console.log(data.some((item: any) => item[1]));
   if (data.some((item: any) => item[1] > 80)) {
     ElNotification({
       title: 'Error',
@@ -116,7 +120,7 @@ option = {
       show: false
     },
     min: 0,
-    max: 100
+    max: 1
   },
   series: [
     {

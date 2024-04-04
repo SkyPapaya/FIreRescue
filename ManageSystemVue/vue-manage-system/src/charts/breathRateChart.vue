@@ -18,7 +18,6 @@ let breathRate;
 const load = () => {
   service.get('/vital/getTheLatest').then((res) => {
     breathRate = res.data.breathRate
-    console.log(res.data)
   })
 }
 

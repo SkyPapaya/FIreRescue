@@ -3,16 +3,25 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import {ref, onMounted} from 'vue';
 import * as echarts from 'echarts';
+import service from "../utils/request";
 
 type EChartsOption = echarts.EChartsOption;
 let option: EChartsOption;
 const chart = ref<HTMLDivElement | null>(null);
 
-onMounted(() => {
-  const myChart = echarts.init(chart.value!);
+let signalStrength;
 
+const load = () => {
+  service.get('/vital/getTheLatest').then((res) => {
+    signalStrength = res.data.signalStrength
+  })
+
+}
+onMounted(() => {
+  load()
+  const myChart = echarts.init(chart.value!);
   // 定义初始数据
   let value = 50;
 
@@ -27,13 +36,13 @@ onMounted(() => {
     // 更新图表数据
     myChart.setOption({
       series: [{
-        data: [{ value: value.toFixed(1) }]
+        data: [signalStrength + 100]
       }]
     });
   }, 200); // 间隔为2秒
 
   option = {
-    title:{
+    title: {
       text: '信号强度',
       left: 'center',
 

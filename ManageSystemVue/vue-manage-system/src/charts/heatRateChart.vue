@@ -5,7 +5,6 @@
 <script setup lang="ts">
 import * as echarts from 'echarts';
 import {ref, onMounted} from 'vue';
-import {ElNotification} from "element-plus";
 import service from "../utils/request";
 
 const chart = ref<HTMLDivElement | null>(null);
@@ -18,7 +17,6 @@ let heartRate;
 const load = () => {
   service.get('/vital/getTheLatest').then((res) => {
     heartRate = res.data.heartRate
-    console.log(res.data)
   })
 }
 
