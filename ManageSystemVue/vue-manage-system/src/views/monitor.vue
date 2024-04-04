@@ -16,7 +16,6 @@ import { ref, onMounted } from 'vue';
 import sign from '../charts/signalChart.vue'
 import heat from '../charts/heatRateChart.vue'
 import breath from '../charts/breathRateChart.vue'
-
 const signContent = ref("Initial content");
 const heatContent = ref("Initial content");
 const breathContent = ref("Initial content");

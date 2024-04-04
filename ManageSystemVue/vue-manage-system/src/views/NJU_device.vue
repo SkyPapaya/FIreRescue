@@ -1,20 +1,24 @@
-<script lang="ts" setup>
+<script setup lang="ts">
+import { reactive, ref, onMounted } from "vue";
 import service from "../utils/request";
 
 interface environment {
-  device_id: string;
-  thermal_image: string;
   humidity: number;
   temperature: number;
-  people: number;
-  fireExist: number;
+  fire: number;
   smoke: number;
   co: number;
   risk: number;
-  address: string;
-  gmtCreated: string;
-  gmtModified: string;
 }
+
+const state = reactive({
+  tableData:[],
+  form: {},
+});
+
+const activeIndex = ref("1");
+const activeIndex2 = ref("1");
+const count = ref(0);
 
 const tableRowClassName = ({
                              row,
@@ -23,7 +27,7 @@ const tableRowClassName = ({
   row: environment;
   rowIndex: number;
 }) => {
-  if (row.risk > 0.8 || row.co > 0.8 || row.fireExist === 1) {
+  if (row.risk > 0.8 || row.co > 0.8 || row.fire === 1) {
     return "warning-row";
   } else if (rowIndex === 3) {
     return "success-row";
@@ -31,52 +35,27 @@ const tableRowClassName = ({
   return "";
 };
 
-const state = reactive({
-  tableData: [],
-  form: {}
-})
-import {reactive, ref, onMounted} from "vue";
-
-const activeIndex = ref("1");
-const activeIndex2 = ref("1");
-const count = ref(0)
-//请求后台数据
+// 请求后台数据
 const load = () => {
-  service.get('/environments').then((res) => {
-    //res.data是后台返回的数据
-    state.tableData = res.data
-    console.log(res.data)
-  })
-}
+  service.get('/environment/getTheLatest').then((res) => {
+    state.tableData.push(res.data);
+    console.log(res.data);
+  });
+};
+
 // 初始加载数据
 onMounted(() => {
   load();
 });
+
 // 每三秒刷新一次数据
 setInterval(() => {
   load();
-  checkFire()
-
 }, 10000);
-import {ElNotification} from 'element-plus'
 
-const checkFire = () => {
-  if (state.tableData.some((item: environment) => item.fireExist === 1)) {
-    ElNotification({
-      title: 'Error',
-      message: '有火情',
-      type: 'error',
-    });
-  } else if (state.tableData.some((item: environment) => item.risk > 0.8) || state.tableData.some((item: environment) => item.co > 0.8)) {
-    ElNotification({
-      title: 'Error',
-      message: '有火灾风险',
-      type: 'error',
-      duration:10000,
-    });
-  }
-};
+import { ElNotification } from 'element-plus';
 </script>
+
 <style>
 .el-table .warning-row {
   --el-table-tr-bg-color: var(--el-color-warning-light-9);
@@ -127,14 +106,12 @@ const checkFire = () => {
             :row-class-name="tableRowClassName"
         >
 
-          <el-table-column prop="fireExist" label="是否存在火源" width="180px" align="center"/>
+          <el-table-column prop="humidity" label="湿度" width="180px" align="center"/>
           <el-table-column prop="temperature" label="最高温度" width="180px" align="center"/>
+          <el-table-column prop="fire" label="是否存在火源" width="180px" align="center"/>
           <el-table-column prop="smoke" label="烟雾浓度" width="180px" align="center"/>
           <el-table-column prop="co" label="一氧化碳浓度" width="180px" align="center"/>
           <el-table-column prop="risk" label="火灾风险" width="180px" align="center"/>
-          <el-table-column prop="humidity" label="湿度" width="180px" align="center"/>
-          <el-table-column prop="people" label="是否有人" width="180px" align="center"/>
-          <el-table-column prop="address" label="地址" width="180px" align="center"/>
         </el-table>
       </div>
 
