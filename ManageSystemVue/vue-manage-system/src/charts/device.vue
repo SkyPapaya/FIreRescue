@@ -3,7 +3,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import {ref, onMounted} from 'vue';
 import * as echarts from 'echarts';
 import service from "../utils/request";
 
@@ -19,16 +19,16 @@ let option: EChartsOption = {
       source: [
         ['湿度', 0],
         ['温度', 0],
-        ['人数', 0],
         ['火情', 0],
         ['CO浓度', 0],
         ['烟雾浓度', 0],
       ]
     },
     {
+      // 根据第二个数据进行排序
       transform: {
         type: 'sort',
-        config: {dimension: 'value', order: 'desc'} // 根据第二个数据进行排序
+        config: {dimension: 'value', order: 'desc'}
       }
     }
   ],
@@ -40,19 +40,21 @@ let option: EChartsOption = {
     min: 0,
     max: 100
   },
+  // 编码修改为正确的名称
   series: {
     type: 'bar',
-    encode: {x: 'name', y: 'value'}, // 编码修改为正确的名称
+    encode: {x: 'name', y: 'value'},
     datasetIndex: 1,
+    // y 值大于 80 时柱状图颜色为红色，y 值大于 50 小于等于 80 时柱状图颜色为黄色，y 值小于等于 50 时柱状图颜色为蓝色
     itemStyle: {
       color: function (params: any) {
         const value = params.data[1]; // 获取 y 值
         if (value > 80) {
-          return 'red'; // y 值大于 80 时柱状图颜色为红色
+          return 'red';
         } else if (value > 50) {
-          return 'yellow'; // y 值大于 50 小于等于 80 时柱状图颜色为黄色
+          return 'yellow';
         } else {
-          return 'blue'; // y 值小于等于 50 时柱状图颜色为蓝色
+          return 'blue';
         }
       }
     }
@@ -72,16 +74,15 @@ let people;
 let fire;
 let co;
 let smoke;
-const load = () =>{
-  service.get('environment/getTheLatest').then((res) =>{
+//获取数据
+const load = () => {
+  service.get('environment/getTheLatest').then((res) => {
     humidity = res.data.humidity;
     temperature = res.data.temperature;
-    people =  res.data.people;
+    people = res.data.people;
     fire = res.data.fire;
     co = res.data.co;
     smoke = res.data.smoke;
-    console.log("--------" + humidity)
-
     // 替换数据
     option.dataset[0].source = [
       ['湿度', humidity],
@@ -95,14 +96,15 @@ const load = () =>{
 
 onMounted(() => {
   const myChart = echarts.init(chart.value!);
-  load(); // 加载数据
+  load();
   myChart.setOption(option);
 
-  // 模拟数据动态更新
   setInterval(() => {
-    load(); // 加载数据
-    option.dataset[0].source.sort((a: any, b: any) => b[1] - a[1]); // 根据第二个数据排序
-    myChart.setOption(option); // 更新图表
+    load();
+    // 根据第二个数据排序
+    option.dataset[0].source.sort((a: any, b: any) => b[1] - a[1]);
+    // 更新图表
+    myChart.setOption(option);
   }, 1000);
 });
 </script>

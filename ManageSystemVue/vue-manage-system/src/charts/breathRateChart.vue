@@ -5,7 +5,6 @@
 <script setup lang="ts">
 import * as echarts from 'echarts';
 import {ref, onMounted} from 'vue';
-import {ElNotification} from "element-plus";
 import service from "../utils/request";
 
 const chart = ref<HTMLDivElement | null>(null);
@@ -13,7 +12,6 @@ let now = new Date();
 let data: any[] = [];
 let xAxisData: string[] = [];
 let option: echarts.EChartsOption;
-
 let breathRate;
 const load = () => {
   service.get('/vital/getTheLatest').then((res) => {
@@ -21,12 +19,12 @@ const load = () => {
   })
 }
 
-//将这里的smoothedValue替换成获取到的数据
-function randomData() {
-  now = new Date(now.getTime() + 1000); // 每次增加1秒
-
+//获取呼吸频率
+function getBreathRate() {
+  now = new Date(now.getTime() + 1000);
   return {
-    name: now.toLocaleTimeString(), // 使用时分秒作为名称
+    //以时分秒作为横坐标
+    name: now.toLocaleTimeString(),
     value: [
       now.toLocaleTimeString(),
       Math.round(breathRate)
@@ -34,8 +32,9 @@ function randomData() {
   };
 }
 
+//初始化图表
 for (var i = 0; i < 100; i++) {
-  const newData = randomData();
+  const newData = getBreathRate();
   data.push(newData.value);
   xAxisData.push(newData.name);
 }
@@ -49,7 +48,7 @@ onMounted(() => {
 
   setInterval(function () {
     load();
-    const newData = randomData();
+    const newData = getBreathRate();
     data.shift();
     xAxisData.shift();
     data.push(newData.value);
@@ -66,7 +65,6 @@ onMounted(() => {
         }
       ]
     });
-
 
     // 更新标记点的位置
     myChart.setOption({
@@ -114,7 +112,7 @@ option = {
     splitLine: {
       show: true
     },
-    data: xAxisData // 不再需要格式化为日期格式
+    data: xAxisData
   },
   yAxis: {
     type: 'value',

@@ -21,7 +21,7 @@ function generateRandomData() {
   products.forEach(product => {
     const productData = [product];
     for (let i = 0; i < 12; i++) {
-      productData.push(Math.random() * 100); // 随机生成数据
+      productData.push((Math.random() * 100).toString()); // 随机生成数据
     }
     sourceData.push(productData);
   });
@@ -36,8 +36,8 @@ onMounted(() => {
     myChart.setOption(option);
   }
 
-  // 每10秒钟刷新一次数据
-  const interval = setInterval(refreshData, 10000);
+  // 每60秒钟刷新一次数据
+  const interval = setInterval(refreshData, 60000);
   option = {
     title: {text: '火灾类型统计'},
     legend: {},

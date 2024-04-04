@@ -9,26 +9,21 @@ import {ElNotification} from "element-plus";
 import service from "../utils/request";
 
 const chart = ref<HTMLDivElement | null>(null);
-
 let now = new Date();
 let data: any[] = [];
 let xAxisData: string[] = [];
 let option: echarts.EChartsOption;
 let risk;
-
-// 滑动平均法处理随机数据
-
 const load = () => {
   service.get('environment/getTheLatest').then((res) => {
     risk = res.data.risk
   })
 }
 
-
 function randomData() {
-  now = new Date(now.getTime() + 30000); // 每次增加30秒
+  now = new Date(now.getTime() + 1000);
   return {
-    name: now.toLocaleTimeString(), // 使用时分秒作为名称
+    name: now.toLocaleTimeString(),
     value: [
       now.toLocaleTimeString(),
       Math.round(risk)
@@ -66,7 +61,7 @@ onMounted(() => {
         }
       ]
     });
-  }, 1000); // 每1秒刷新一次
+  }, 1000);
   myChart.setOption(option);
 });
 const checkFire = () => {
