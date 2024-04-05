@@ -39,7 +39,7 @@ onMounted(() => {
         data: [signalStrength + 100]
       }]
     });
-  }, 100); // 间隔为2秒
+  }, 1000); // 间隔为2秒
 
   option = {
     title: {

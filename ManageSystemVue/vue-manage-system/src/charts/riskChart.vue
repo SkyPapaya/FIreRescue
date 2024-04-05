@@ -43,7 +43,14 @@ onMounted(() => {
   });
   setInterval(function () {
     checkFire();
-    const newData = randomData();
+    // ElNotification({
+    //   title: 'Warning ',
+    //   message: '有火灾风险',
+    //   type: 'error',
+    //   duration: 1000,
+    //
+    // });
+    let newData = randomData();
     data.shift();
     xAxisData.shift();
     data.push(newData.value);
@@ -64,9 +71,9 @@ onMounted(() => {
   myChart.setOption(option);
 });
 const checkFire = () => {
-  if (data.some((item: any) => item[1] > 80)) {
+  if (risk  === 1)  {
     ElNotification({
-      title: 'Error',
+      title: 'Warning ',
       message: '有火灾风险',
       type: 'error',
       duration: 10000,

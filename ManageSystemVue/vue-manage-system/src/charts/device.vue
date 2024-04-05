@@ -3,9 +3,10 @@
 </template>
 
 <script setup lang="ts">
-import {ref, onMounted} from 'vue';
+import { ref, onMounted } from 'vue';
 import * as echarts from 'echarts';
 import service from "../utils/request";
+import {ElNotification} from "element-plus";
 
 const chart = ref<HTMLDivElement | null>(null);
 type EChartsOption = echarts.EChartsOption;
@@ -48,10 +49,13 @@ let option: EChartsOption = {
     // y 值大于 80 时柱状图颜色为红色，y 值大于 50 小于等于 80 时柱状图颜色为黄色，y 值小于等于 50 时柱状图颜色为蓝色
     itemStyle: {
       color: function (params: any) {
+        const name = params.data[0]; // 获取名称
         const value = params.data[1]; // 获取 y 值
-        if (value > 80) {
+        if (name === '温度' && value > 70) {
           return 'red';
-        } else if (value > 50) {
+        } else if (value > 45) {
+          return 'red';
+        } else if (value > 30) {
           return 'yellow';
         } else {
           return 'blue';
@@ -80,7 +84,7 @@ const load = () => {
     humidity = res.data.humidity;
     temperature = res.data.temperature;
     people = res.data.people;
-    fire = res.data.fire;
+    fire = res.data.fire * 100;
     co = res.data.co;
     smoke = res.data.smoke;
     // 替换数据
@@ -100,11 +104,20 @@ onMounted(() => {
   myChart.setOption(option);
 
   setInterval(() => {
+
     load();
     // 根据第二个数据排序
     option.dataset[0].source.sort((a: any, b: any) => b[1] - a[1]);
     // 更新图表
     myChart.setOption(option);
   }, 1000);
+  //弹窗设置
+  if(temperature > 50 || fire > 0.01 || co > 20 || smoke > 30) {
+    ElNotification({
+      title: 'Warning',
+      message: '有火情',
+      type: 'error',
+    });
+  }
 });
 </script>
