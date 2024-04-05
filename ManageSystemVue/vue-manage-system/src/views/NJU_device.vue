@@ -30,6 +30,7 @@
 <script setup lang="ts">
 import {reactive, ref, onMounted} from "vue";
 import service from "../utils/request";
+import { ElNotification } from 'element-plus'
 
 interface environment {
   humidity: number;
@@ -39,6 +40,12 @@ interface environment {
   co: number;
   risk: number;
 }
+let humidity; //8
+let temperature; //50
+let fire; //0
+let smoke; //8
+let co; //20
+let risk; //0
 const state = reactive({
   tableData: [],
   form: {},
@@ -54,9 +61,12 @@ const tableRowClassName = ({
   row: environment;
   rowIndex: number;
 }) => {
-  if (row.risk > 0.8 || row.co > 0.8 || row.fire === 1) {
+  if (row.risk === 1 || row.co > 20 || row.fire === 1) {
     return "warning-row";
   }
+
+
+
   return "";
 };
 
@@ -64,7 +74,12 @@ const tableRowClassName = ({
 const load = () => {
   service.get('/environment/getTheLatest').then((res) => {
     state.tableData.push(res.data);
-
+    humidity = res.data.humidity;
+    temperature = res.data.temperature;
+    fire = res.data.fire;
+    smoke = res.data.smoke;
+    co = res.data.co;
+    risk = res.data.risk;
     console.log(res.data);
   });
 };
@@ -78,9 +93,14 @@ onMounted(() => {
 setInterval(() => {
   state.tableData.shift();
   load();
-}, 10000);
-
-import {ElNotification} from 'element-plus';
+  if(humidity > 80 || temperature > 50 || fire === 1 || smoke > 80 || co > 20 || risk === 1){
+    ElNotification({
+      title: 'Warning',
+      message: '有火情',
+      type: 'error',
+    })
+  }
+}, 1000);
 </script>
 
 <style>

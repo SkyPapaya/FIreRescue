@@ -52,7 +52,7 @@ const tableRowClassName = ({
   row: environment;
   rowIndex: number;
 }) => {
-  if (row.risk > 0.8 || row.co > 0.8 || row.fire === 1) {
+  if (row.risk === 1 || row.co > 20 || row.fire === 1) {
     return "warning-row";
   }
   return "";
