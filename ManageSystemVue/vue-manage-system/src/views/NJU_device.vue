@@ -64,6 +64,7 @@ const tableRowClassName = ({
 const load = () => {
   service.get('/environment/getTheLatest').then((res) => {
     state.tableData.push(res.data);
+
     console.log(res.data);
   });
 };
@@ -75,6 +76,7 @@ onMounted(() => {
 
 // 每三秒刷新一次数据
 setInterval(() => {
+  state.tableData.shift();
   load();
 }, 10000);
 

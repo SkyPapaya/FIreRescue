@@ -22,16 +22,16 @@
         <el-card shadow="hover" style="height: 252px">
           <template #header>
             <div class="clearfix">
-              <span>语言详情</span>
+              <span>火灾类型详细</span>
             </div>
           </template>
-          Vue
+          厨房
           <el-progress :percentage="79.4" color="#42b983"></el-progress>
-          TypeScript
+          电器
           <el-progress :percentage="14" color="#f1e05a"></el-progress>
-          CSS
+          粉尘
           <el-progress :percentage="5.6"></el-progress>
-          HTML
+          气体
           <el-progress :percentage="1" color="#f56c6c"></el-progress>
         </el-card>
       </el-col>
@@ -187,27 +187,24 @@ const options2 = {
 };
 const todoList = reactive([
   {
-    title: "今天要修复100个bug",
+    title: "木瓜小区火情",
     status: false,
   },
   {
-    title: "今天要修复100个bug",
+    title: "44栋发生燃气泄露",
     status: false,
   },
   {
-    title: "今天要写100行代码加几个bug吧",
+    title: "海绵小区消防栓维修",
     status: false,
   },
+
   {
-    title: "今天要修复100个bug",
-    status: false,
-  },
-  {
-    title: "今天要修复100个bug",
+    title: "海绵小区消防通道堵塞",
     status: true,
   },
   {
-    title: "今天要写100行代码加几个bug吧",
+    title: "海绵小区消防设施检查",
     status: true,
   },
 ]);

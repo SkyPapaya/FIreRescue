@@ -23,7 +23,7 @@
     </select>
     <insert id="insertEnvironmentDO" parameterType="com.skypapaya.firerescuemanagesystem.DO.EnvironmentDO">
         INSERT INTO environment (co, fire, humidity, risk, smoke, temperature, gmt_created, gmt_modified)
-        VALUES (#{environmentDO.co}, #{fire}, #{humidity}, #{risk}, #{smoke}, #{temperature}, now(), now())
+        VALUES (#{co}, #{fire}, #{humidity}, #{risk}, #{smoke}, #{temperature}, now(), now())
     </insert>
 
 </mapper>

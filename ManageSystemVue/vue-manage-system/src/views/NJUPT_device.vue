@@ -62,6 +62,7 @@ const tableRowClassName = ({
 const load = () => {
   service.get('/environment/getTheLatest').then((res) => {
     state.tableData.push(res.data);
+
     console.log(res.data);
   });
 };
@@ -74,6 +75,7 @@ onMounted(() => {
 //
 setInterval(() => {
   load();
+  state.tableData.shift();
 }, 1000);
 
 

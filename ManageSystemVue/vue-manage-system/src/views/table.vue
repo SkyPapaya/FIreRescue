@@ -11,7 +11,7 @@
         <el-button
             type="warning"
             :icon="CirclePlusFilled"
-            @click="visible = true"
+            @click="handleAdd"
         >新增
         </el-button
         >
@@ -37,13 +37,13 @@
             align="center"
         ></el-table-column>
         <!--       邮箱 -->
-        <el-table-column label="e-mail" prop="e_mail" align="center">
+        <el-table-column label="邮箱" prop="e_mail" align="center">
         </el-table-column>
         <!--          电话号码-->
-        <el-table-column label="phone" prop="e_mail" align="center">
+        <el-table-column label="电话号码" prop="phone" align="center">
         </el-table-column>
         <!--        权限-->
-        <el-table-column label="authority" prop="authority" align="center">
+        <el-table-column label="权限" prop="authority" align="center">
         </el-table-column>
         <!--        地址-->
         <el-table-column
@@ -92,13 +92,12 @@
         ></el-pagination>
       </div>
     </div>
-
   </div>
 </template>
 
 <script setup lang="ts" name="basetable">
-import {ref, reactive} from "vue";
-import {ElMessage, ElMessageBox} from "element-plus";
+import { ref, reactive } from "vue";
+import { ElMessage, ElMessageBox } from "element-plus";
 import {
   Delete,
   Edit,
@@ -106,10 +105,37 @@ import {
   CirclePlusFilled,
   View,
 } from "@element-plus/icons-vue";
-import {fetchData} from "../api/index";
-import TableEdit from "../components/table-edit.vue";
-import TableDetail from "../components/table-detail.vue";
 
+// 模拟API返回数据
+const fetchData = async () => {
+  // 模拟数据
+  return {
+    data: {
+      list: [
+        {
+          id: 1,
+          name: "John Doe",
+          e_mail: "john@example.com",
+          phone: "1234567890",
+          authority: "用户",
+          address: "123 Main St",
+          createdTime: "2024-04-05",
+        },
+        {
+          id: 2,
+          name: "Jane Smith",
+          e_mail: "jane@example.com",
+          phone: "0987654321",
+          authority: "管理员",
+          address: "456 Elm St",
+          createdTime: "2024-04-06",
+        },
+
+      ],
+      pageTotal: 50,
+    },
+  };
+};
 
 interface TableItem {
   id: number;
@@ -118,8 +144,7 @@ interface TableItem {
   phone: string;
   authority: number;
   address: string;
-  date: string;
-
+  createdTime: string;
 }
 
 const query = reactive({
@@ -129,33 +154,29 @@ const query = reactive({
   pageSize: 10,
 });
 
-// 暂时变为写死状态
 const tableData = ref<TableItem[]>([]);
 const pageTotal = ref(0);
-// 获取表格数据
+
 const getData = async () => {
   const res = await fetchData();
   tableData.value = res.data.list;
   pageTotal.value = res.data.pageTotal || 50;
 };
 
-
-// 查询操作
 const handleSearch = () => {
   query.pageIndex = 1;
   getData();
 };
-// 分页导航
+
 const handlePageChange = (val: number) => {
   query.pageIndex = val;
   getData();
 };
 
-
 const visible = ref(false);
 let idx: number = -1;
 const idEdit = ref(false);
-const rowData = ref({});
+const rowData = ref<TableItem>({});
 const handleEdit = (index: number, row: TableItem) => {
   idx = index;
   rowData.value = row;
@@ -164,7 +185,6 @@ const handleEdit = (index: number, row: TableItem) => {
 };
 const updateData = (row: TableItem) => {
   idEdit.value ? (tableData.value[idx] = row) : tableData.value.unshift(row);
-  console.log(tableData.value);
   closeDialog();
 };
 
@@ -178,6 +198,12 @@ const handleView = (row: TableItem) => {
   rowData.value = row;
   visible1.value = true;
 };
+
+const handleAdd = () => {
+  visible.value = true;
+};
+
+getData();
 </script>
 
 <style scoped>
