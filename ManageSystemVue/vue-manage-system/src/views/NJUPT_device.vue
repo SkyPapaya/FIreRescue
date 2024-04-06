@@ -63,7 +63,6 @@ const load = () => {
   service.get('/environment/getTheLatest').then((res) => {
     state.tableData.push(res.data);
 
-    console.log(res.data);
   });
 };
 

@@ -80,7 +80,6 @@ const load = () => {
     smoke = res.data.smoke;
     co = res.data.co;
     risk = res.data.risk;
-    console.log(res.data);
   });
 };
 

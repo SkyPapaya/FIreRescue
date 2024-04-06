@@ -4,8 +4,8 @@
 
 <script setup lang="ts">
 import * as echarts from 'echarts';
-import {ref, onMounted} from 'vue';
-import {ElNotification} from "element-plus";
+import { ref, onMounted } from 'vue';
+import { ElNotification } from "element-plus";
 import service from "../utils/request";
 
 const chart = ref<HTMLDivElement | null>(null);
@@ -14,19 +14,18 @@ let data: any[] = [];
 let xAxisData: string[] = [];
 let option: echarts.EChartsOption;
 let risk;
+
 const load = () => {
   service.get('environment/getTheLatest').then((res) => {
-    risk = res.data.risk
-  })
-}
+    risk = res.data.risk;
+  });
+};
 
 function randomData() {
   now = new Date(now.getTime() + 1000);
   return {
     name: now.toLocaleTimeString(),
-    value: [now.toLocaleTimeString(),
-      risk
-    ]
+    value: [now.toLocaleTimeString(), risk]
   };
 }
 
@@ -35,21 +34,16 @@ for (var i = 0; i < 100; i++) {
   data.push(newData.value);
   xAxisData.push(newData.name);
 }
+
 onMounted(() => {
-  load()
   const myChart = echarts.init(chart.value!);
   window.addEventListener('resize', () => {
     myChart.resize();
   });
+
   setInterval(function () {
-    checkFire();
-    // ElNotification({
-    //   title: 'Warning ',
-    //   message: '有火灾风险',
-    //   type: 'error',
-    //   duration: 1000,
-    //
-    // });
+    load(); // 更新risk数据
+    checkFire(); // 检查火灾风险
     let newData = randomData();
     data.shift();
     xAxisData.shift();
@@ -68,10 +62,12 @@ onMounted(() => {
       ]
     });
   }, 1000);
+
   myChart.setOption(option);
 });
+
 const checkFire = () => {
-  if (risk  === 1)  {
+  if (risk === 1) {
     ElNotification({
       title: 'Warning ',
       message: '有火灾风险',
