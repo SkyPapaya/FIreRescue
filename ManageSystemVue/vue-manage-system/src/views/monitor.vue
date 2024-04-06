@@ -21,7 +21,7 @@
 </template>
 
 <script setup lang="ts">
-import {ref, onMounted} from 'vue';
+import { ref, onMounted } from 'vue';
 import sign from '../charts/signalChart.vue'
 import heat from '../charts/heatRateChart.vue'
 import breath from '../charts/breathRateChart.vue'
@@ -36,27 +36,35 @@ const warningColor = ref("black");
 const distanceColor = ref("black");
 
 let distance;
-let active
+let active;
 
 const load = () => {
   service.get('/vital/getTheLatest').then((res) => {
-    distance = res.data.distance
-    active = res.data.active
-  })
-}
+    distance = res.data.distance;
+    active = res.data.active;
+  });
+};
+
 onMounted(() => {
   // 设置定时器每秒更新一次数据
   setInterval(() => {
     load();
     // 随机切换 actionContent 和 warningContent 的值
-    const actionValues = ["无人", "静息", "安静", "动作", "持续动作"];
+    const actionValues = {
+      0: { value: "无人", color: "black" },
+      1: { value: "静息", color: "#00c4ff" },
+      2: { value: "安静", color: "#4bfc4e" },
+      3: { value: "动作", color: "#ffa02c" },
+      4: { value: "持续动作", color: "red" }
+    };
+
     const warningValues = ["正常", "异常"];
-    actionContent.value = actionValues[active];
+    actionContent.value = actionValues[active].value;
     //设置为设备状态正常
     warningContent.value = warningValues[0];
 
-    // 当 actionContent 的值为 "活动" 时，将字体颜色设置为蓝色
-    actionColor.value = actionContent.value === "活动" ? "#00c4ff" : "black";
+    // 设置字体颜色
+    actionColor.value = actionValues[active].color;
     warningColor.value = warningContent.value === "异常" ? "red" : "black";
 
     // 随机生成距离，保留一位小数，范围在 0 到 10 之间

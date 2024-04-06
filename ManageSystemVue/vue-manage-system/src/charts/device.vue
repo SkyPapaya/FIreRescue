@@ -46,12 +46,13 @@ let option: EChartsOption = {
     type: 'bar',
     encode: {x: 'name', y: 'value'},
     datasetIndex: 1,
-    // y 值大于 80 时柱状图颜色为红色，y 值大于 50 小于等于 80 时柱状图颜色为黄色，y 值小于等于 50 时柱状图颜色为蓝色
     itemStyle: {
       color: function (params: any) {
         const name = params.data[0]; // 获取名称
         const value = params.data[1]; // 获取 y 值
-        if (name === '温度' && value > 70) {
+        if (name === '湿度') {
+          return 'blue'; // 湿度柱状图颜色保持蓝色
+        } else if (name === '温度' && value > 70) {
           return 'red';
         } else if (value > 45) {
           return 'red';
@@ -60,9 +61,18 @@ let option: EChartsOption = {
         } else {
           return 'blue';
         }
+
+        if(name === 'co' && value > 20) {
+          return 'red';
+        }
+
+        if(name === 'smoke' && value > 30) {
+          return 'red';
+        }
       }
     }
   },
+
   tooltip: {
     trigger: 'axis',
     axisPointer: {type: 'shadow'},
@@ -110,14 +120,15 @@ onMounted(() => {
     option.dataset[0].source.sort((a: any, b: any) => b[1] - a[1]);
     // 更新图表
     myChart.setOption(option);
+    //弹窗设置
+    if(temperature > 50 || fire > 0.01 || co > 20 || smoke > 30) {
+      ElNotification({
+        title: 'Warning',
+        message: '有火情',
+        type: 'error',
+      });
+    }
   }, 1000);
-  //弹窗设置
-  if(temperature > 50 || fire > 0.01 || co > 20 || smoke > 30) {
-    ElNotification({
-      title: 'Warning',
-      message: '有火情',
-      type: 'error',
-    });
-  }
+
 });
 </script>
