@@ -4,15 +4,16 @@
       <div style="display:block">
         <el-table
             :data="state.tableData"
-            style="width: 100%; font-size: 20px; display: block"
+            style="width: 100%; font-size: 20px; display: block; color: black"
             :row-class-name="tableRowClassName"
+            :header-cell-style="{color:'black'}"
         >
 
-          <el-table-column prop="humidity" label="湿度" width="180px" align="center"/>
+          <el-table-column prop="humidity" label="湿度" width="180px" align="center" style="color: black"/>
           <el-table-column prop="temperature" label="最高温度" width="180px" align="center"/>
           <el-table-column prop="fire" label="是否存在火源" width="180px" align="center"/>
           <el-table-column prop="smoke" label="烟雾浓度" width="180px" align="center"/>
-          <el-table-column prop="co" label="一氧化碳浓度" width="180px" align="center"/>
+          <el-table-column prop="co" label="有害气体浓度" width="180px" align="center"/>
           <el-table-column prop="risk" label="火灾风险" width="180px" align="center"/>
         </el-table>
       </div>
@@ -30,7 +31,8 @@
 <script setup lang="ts">
 import {reactive, ref, onMounted} from "vue";
 import service from "../utils/request";
-import { ElNotification } from 'element-plus'
+import {ElNotification} from 'element-plus'
+import {color} from "echarts";
 
 interface environment {
   humidity: number;
@@ -40,6 +42,7 @@ interface environment {
   co: number;
   risk: number;
 }
+
 let humidity; //8
 let temperature; //50
 let fire; //0
@@ -64,7 +67,6 @@ const tableRowClassName = ({
   if (row.risk === 1 || row.co > 20 || row.fire === 1) {
     return "warning-row";
   }
-
 
 
   return "";
@@ -92,7 +94,7 @@ onMounted(() => {
 setInterval(() => {
   state.tableData.shift();
   load();
-  if(humidity > 80 || temperature > 50 || fire === 1 || smoke > 80 || co > 20 || risk === 1){
+  if (humidity > 80 || temperature > 50 || fire === 1 || smoke > 80 || co > 20 || risk === 1) {
     ElNotification({
       title: 'Warning',
       message: '有火情',

@@ -61,11 +61,9 @@ let option: EChartsOption = {
         } else {
           return 'blue';
         }
-
         if(name === 'co' && value > 20) {
           return 'red';
         }
-
         if(name === 'smoke' && value > 30) {
           return 'red';
         }
@@ -102,7 +100,7 @@ const load = () => {
       ['湿度', humidity],
       ['温度', temperature],
       ['火情', fire],
-      ['CO浓度', co],
+      ['有害气体浓度', co],
       ['烟雾浓度', smoke],
     ];
   });
@@ -126,6 +124,7 @@ onMounted(() => {
         title: 'Warning',
         message: '有火情',
         type: 'error',
+        duration:1000
       });
     }
   }, 1000);

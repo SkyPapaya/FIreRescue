@@ -4,10 +4,12 @@
 
 <script setup lang="ts">
 import * as echarts from 'echarts';
-import {ref, onMounted} from 'vue';
+import { ref, onMounted } from 'vue';
 import service from "../utils/request";
 
 const chart = ref<HTMLDivElement | null>(null);
+const fit = 'fill';
+const url = './img/heart.png';
 let now = new Date();
 let data: any[] = [];
 let xAxisData: string[] = [];
@@ -16,9 +18,9 @@ let option: echarts.EChartsOption;
 let heartRate;
 const load = () => {
   service.get('/vital/getTheLatest').then((res) => {
-    heartRate = res.data.heartRate
-  })
-}
+    heartRate = res.data.heartRate;
+  });
+};
 
 //将这里的smoothedValue替换成获取到的数据
 function randomData() {
@@ -38,7 +40,6 @@ for (var i = 0; i < 100; i++) {
   data.push(newData.value);
   xAxisData.push(newData.name);
 }
-
 
 onMounted(() => {
   const myChart = echarts.init(chart.value!);
@@ -76,10 +77,12 @@ onMounted(() => {
         style: {
           text: `实时心率: ${newData.value[1]}`,
           textAlign: 'center',
-          fill: '#00c4ff',
+          fill: '#ef3b3b',
           fontSize: 24
         }
-      }]
+      },
+
+      ]
     });
   }, 1000); // 每1秒刷新一次
 

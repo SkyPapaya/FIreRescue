@@ -75,7 +75,7 @@ onMounted(() => {
         style: {
           text: `实时呼吸频率: ${newData.value[1]}`,
           textAlign: 'center',
-          fill: '#00c4ff',
+          fill: '#4afafa',
           fontSize: 24
         }
       }]
@@ -86,7 +86,8 @@ onMounted(() => {
 });
 option = {
   title: {
-    text: '呼吸频率'
+    text: '呼吸频率',
+
   },
   tooltip: {
     trigger: 'axis',
@@ -130,7 +131,7 @@ option = {
       showSymbol: false,
       data: data,
       lineStyle: {
-        color: '#ef3b3b'
+        color: '#ffa02c'
       }
     }
   ]
