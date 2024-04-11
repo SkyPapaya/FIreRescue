@@ -1,5 +1,31 @@
 import matplotlib.pyplot as plt
-from random import randint
+import cv2
+import numpy as np
+from numpy.random import randint
+
+
+def convert_to_binary(img):
+    # 转换为灰度图
+    gray_img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+
+    # 根据像素亮度设置阈值
+    _, binary_img = cv2.threshold(gray_img, 230, 255, cv2.THRESH_BINARY)
+
+    # 反转二值图像
+    inverted_binary_img = cv2.bitwise_not(binary_img)
+
+    # 将二值图像转换为只含有0和1的矩阵
+    binary_matrix = (inverted_binary_img / 255).astype(np.uint8)
+    print(binary_matrix.shape)
+    return binary_matrix
+
+
+# 读取图像
+image_path = './img/image1.png'
+image = cv2.imread(image_path)
+
+# 转换为只含有0和1的矩阵
+binary_matrix = convert_to_binary(image)
 
 
 class SearchEntry():
@@ -18,16 +44,10 @@ class SearchEntry():
 # 初始化map类，定义地图的长宽，并设置保存地图信息的二维数据map的值为0，0表示可以移动到这个点
 class Map():
     # 初始化地图信息
-    def __init__(self, width, height):
+    def __init__(self, width, height, binary_matrix):
         self.width = width
         self.height = height
-        self.map = [[0 for x in range(self.width)] for y in range(self.height)]
-
-    # 创建一个不可到达矩阵
-    def createBlock(self, block_num):
-        for i in range(block_num):
-            x, y = (randint(0, self.width - 1), randint(0, self.height - 1))
-            self.map[y][x] = 1
+        self.map = binary_matrix
 
     # 随机获取可移动节点的函数，后面是否在这里进行起点的自定义？
     def generatePos(self, rangeX, rangeY):
@@ -70,9 +90,9 @@ def AStarSearch(map, source, dest):
         # 获取相邻位置坐标
         # 值考虑上下左右移动
 
-        #offsets = [(-1, 0), (0, -1), (1, 0), (0, 1)]
+        # offsets = [(-1, 0), (0, -1), (1, 0), (0, 1)]
         # 考虑使用斜线移动
-        offsets = [(-1,0), (0, -1), (1, 0), (0, 1), (-1,-1), (1, -1), (-1, 1), (1, 1)]
+        offsets = [(-1, 0), (0, -1), (1, 0), (0, 1), (-1, -1), (1, -1), (-1, 1), (1, 1)]
         # 用来存储可移动的位置坐标（可移动方向）
         feasibleDirection = []
         for offset in offsets:
@@ -103,22 +123,20 @@ def AStarSearch(map, source, dest):
     def addAdjacentPositions(map, location, dest, openlist, closedlist):
         poslist = getPositions(map, location)
         for pos in poslist:
-            # if position is already in closedlist, do nothing
             if isInList(closedlist, pos) is None:
                 findEntry = isInList(openlist, pos)
                 h_cost = calHeuristic(pos, dest)
                 g_cost = location.g_cost + getMoveCost(location, pos)
                 if findEntry is None:
-                    # if position is not in openlist, add it to openlist
+                    # 如果位置没有在可行方向列表中，加入位置
                     openlist[pos] = SearchEntry(pos[0], pos[1], g_cost, g_cost + h_cost, location)
                 elif findEntry.g_cost > g_cost:
-                    # if position is in openlist and cost is larger than current one,
-                    # then update cost and previous position
+                    # 如果位置的行进方向代价小于以前放入的代价，更新位置
                     findEntry.g_cost = g_cost
                     findEntry.f_cost = g_cost + h_cost
                     findEntry.pre_entry = location
 
-    # find the least cost position in openlist, return None if openlist is empty
+    # 找到最小代价路径，如果为空，返回none
     def getFastPosition(openlist):
         fast = None
         for entry in openlist.values():
@@ -138,7 +156,7 @@ def AStarSearch(map, source, dest):
         if location is None:
             # not found valid path
             print("can't find valid path")
-            break;
+            break
 
         if location.x == dest.x and location.y == dest.y:
             break
@@ -147,20 +165,20 @@ def AStarSearch(map, source, dest):
         openlist.pop(location.getPos())
         addAdjacentPositions(map, location, dest, openlist, closedlist)
 
-    # mark the found path at the map
+    # 在地图中标记逃生路线
+
     while location is not None:
         map.map[location.y][location.x] = 2
         location = location.pre_entry
 
 
-WIDTH = 512
-HEIGHT = 128
-BLOCK_NUM = 2000
-map = Map(WIDTH, HEIGHT)
-map.createBlock(BLOCK_NUM)
+WIDTH = binary_matrix.shape[1]
+HEIGHT = binary_matrix.shape[0]
 
-source = map.generatePos((0, WIDTH // 3), (0, HEIGHT // 3))
-dest = map.generatePos((WIDTH // 2, WIDTH - 1), (HEIGHT // 2, HEIGHT - 1))
+map = Map(WIDTH, HEIGHT, binary_matrix)
+
+source = (460, 360)
+dest = (280, 480)
 
 AStarSearch(map, source, dest)
 

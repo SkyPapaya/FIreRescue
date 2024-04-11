@@ -4,7 +4,7 @@
 
 <script setup lang="ts">
 import * as echarts from 'echarts';
-import {ref, onMounted} from 'vue';
+import { ref, onMounted } from 'vue';
 import service from "../utils/request";
 
 const chart = ref<HTMLDivElement | null>(null);
@@ -13,17 +13,17 @@ let data: any[] = [];
 let xAxisData: string[] = [];
 let option: echarts.EChartsOption;
 let breathRate;
-const load = () => {
-  service.get('/vital/getTheLatest').then((res) => {
-    breathRate = res.data.breathRate
-  })
+
+// 生成带有轻微波动的数据
+function generateFluctuatedData(originalData: number[]): number[] {
+  return originalData.map((value) => value + Math.random() * 10 - 5);
 }
 
-//获取呼吸频率
+// 获取呼吸频率
 function getBreathRate() {
   now = new Date(now.getTime() + 1000);
   return {
-    //以时分秒作为横坐标
+    // 以时分秒作为横坐标
     name: now.toLocaleTimeString(),
     value: [
       now.toLocaleTimeString(),
@@ -32,13 +32,19 @@ function getBreathRate() {
   };
 }
 
-//初始化图表
+// 初始化图表数据
 for (var i = 0; i < 100; i++) {
   const newData = getBreathRate();
-  data.push(newData.value);
+  data.push(newData.value[1]);
   xAxisData.push(newData.name);
 }
 
+// 加载数据
+const load = () => {
+  service.get('/vital/getTheLatest').then((res) => {
+    breathRate = res.data.breathRate;
+  });
+}
 
 onMounted(() => {
   const myChart = echarts.init(chart.value!);
@@ -46,23 +52,32 @@ onMounted(() => {
     myChart.resize();
   });
 
-  setInterval(function () {
+  setInterval(() => {
     load();
+
+    // 更新额外线的数据
     const newData = getBreathRate();
     data.shift();
     xAxisData.shift();
-    data.push(newData.value);
+    data.push(newData.value[1]);
     xAxisData.push(newData.name);
+
+    // 更新额外线的数据
+    const fluctuatedData2 = generateFluctuatedData(data);
+    const fluctuatedData3 = generateFluctuatedData(data);
+    const fluctuatedData4 = generateFluctuatedData(data);
+    const fluctuatedData5 = generateFluctuatedData(data);
+
     myChart.setOption({
+      xAxis: {
+        data: xAxisData
+      },
       series: [
-        {
-          data: data
-        }
-      ],
-      xAxis: [
-        {
-          data: xAxisData
-        }
+        { data: data },
+        { data: fluctuatedData2 },
+        { data: fluctuatedData3 },
+        { data: fluctuatedData4 },
+        { data: fluctuatedData5 }
       ]
     });
 
@@ -84,10 +99,10 @@ onMounted(() => {
 
   myChart.setOption(option);
 });
+
 option = {
   title: {
     text: '呼吸频率',
-
   },
   tooltip: {
     trigger: 'axis',
@@ -132,6 +147,50 @@ option = {
       data: data,
       lineStyle: {
         color: '#ffa02c'
+      }
+    },
+    {
+      name: '线 2',
+      type: 'line',
+      showSymbol: true, // 显示数据点
+      symbol: 'circle', // 数据点样式
+      symbolSize: 6, // 数据点大小
+      data: [], // 数据在组件挂载后更新
+      lineStyle: {
+        color: '#ffa02c'
+      }
+    },
+    {
+      name: '线 3',
+      type: 'line',
+      showSymbol: true, // 显示数据点
+      symbol: 'circle', // 数据点样式
+      symbolSize: 6, // 数据点大小
+      data: [], // 数据在组件挂载后更新
+      lineStyle: {
+        color: '#4afafa'
+      }
+    },
+    {
+      name: '线 4',
+      type: 'line',
+      showSymbol: true, // 显示数据点
+      symbol: 'circle', // 数据点样式
+      symbolSize: 6, // 数据点大小
+      data: [], // 数据在组件挂载后更新
+      lineStyle: {
+        color: '#ff5f72'
+      }
+    },
+    {
+      name: '线 5',
+      type: 'line',
+      showSymbol: true, // 显示数据点
+      symbol: 'circle', // 数据点样式
+      symbolSize: 6, // 数据点大小
+      data: [], // 数据在组件挂载后更新
+      lineStyle: {
+        color: '#8663e1'
       }
     }
   ]
