@@ -32,7 +32,6 @@ class SearchEntry():
     def __init__(self, x, y, g_cost, f_cost=0, pre_entry=None):
         self.x = x
         self.y = y
-        # cost move form start entry to this entry
         self.g_cost = g_cost
         self.f_cost = f_cost
         self.pre_entry = pre_entry
@@ -62,12 +61,22 @@ class Map():
 
 
 # 地图信息可视化
-def showMapWithColors(map, start, end):
+def showMapWithColors(map, start, end, path=None):
+    map_copy = map.copy()  # 创建地图副本
+    if path:
+        for point in path:
+            map_copy[point[1], point[0]] = 3  # 将路径标记为3，与其他值不重叠
+
     plt.figure(figsize=(8, 8))
-    plt.imshow(map, cmap='RdYlGn', interpolation='nearest')
+    plt.imshow(map_copy, cmap='binary', interpolation='nearest', vmin=0, vmax=3)  # 使用binary colormap
     # 标记起点和终点
-    plt.scatter(start[0], start[1], color='blue', s=100, marker='o', label='Start')
-    plt.scatter(end[0], end[1], color='purple', s=100, marker='o', label='End')
+    plt.scatter(start[0], start[1], color='blue', s=50, marker='v', label='Start')
+    plt.scatter(end[0], end[1], color='purple', s=50, marker='x', label='End')
+
+    if path:
+        path_array = np.array(path)
+        plt.plot(path_array[:, 0], path_array[:, 1], color='red', linewidth=3)  # 加粗路径线条，使用红色标记
+
     plt.legend()
     plt.title('Map with Path')
     plt.xticks([])
@@ -165,22 +174,26 @@ def AStarSearch(map, source, dest):
         openlist.pop(location.getPos())
         addAdjacentPositions(map, location, dest, openlist, closedlist)
 
+    path = []
     # 在地图中标记逃生路线
-
     while location is not None:
-        map.map[location.y][location.x] = 2
+        path.append(location.getPos())
         location = location.pre_entry
+    print(path)
+    return path
 
 
 WIDTH = binary_matrix.shape[1]
 HEIGHT = binary_matrix.shape[0]
 
 map = Map(WIDTH, HEIGHT, binary_matrix)
+count = 0
 
-source = (460, 360)
-dest = (280, 480)
-
-AStarSearch(map, source, dest)
-
-map_data = map.getMap()
-showMapWithColors(map_data, source, dest)
+dest = (380, 480)
+while True:
+    source_x = int(input("Enter the x-coordinate of the new source point: "))
+    source_y = int(input("Enter the y-coordinate of the new source point: "))
+    source = (source_x, source_y)
+    path = AStarSearch(map, source, dest)
+    map_data = map.getMap()
+    showMapWithColors(map_data, source, dest, path)
