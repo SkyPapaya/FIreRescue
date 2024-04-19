@@ -155,50 +155,50 @@ option = {
       lineStyle: {
         color: '#ef3b3b'
       }
-    },
-    {
-      name: '线 2',
-      type: 'line',
-      showSymbol: true, // 显示数据点
-      symbol: 'circle', // 数据点样式
-      symbolSize: 6, // 数据点大小
-      data: data2,
-      lineStyle: {
-        color: '#ffa02c'
-      }
-    },
-    {
-      name: '线 3',
-      type: 'line',
-      showSymbol: true, // 显示数据点
-      symbol: 'circle', // 数据点样式
-      symbolSize: 6, // 数据点大小
-      data: data3,
-      lineStyle: {
-        color: '#4afafa'
-      }
-    },
-    {
-      name: '线 4',
-      type: 'line',
-      showSymbol: true, // 显示数据点
-      symbol: 'circle', // 数据点样式
-      symbolSize: 6, // 数据点大小
-      data: data4,
-      lineStyle: {
-        color: '#ff5f72'
-      }
-    },
-    {
-      name: '线 5',
-      type: 'line',
-      showSymbol: true, // 显示数据点
-      symbol: 'circle', // 数据点样式
-      symbolSize: 6, // 数据点大小
-      data: data5,
-      lineStyle: {
-        color: '#8663e1'
-      }
+
+      // {
+      //   name: '线 2',
+      //   type: 'line',
+      //   showSymbol: true, // 显示数据点
+      //   symbol: 'circle', // 数据点样式
+      //   symbolSize: 6, // 数据点大小
+      //   data: data2,
+      //   lineStyle: {
+      //     color: '#ffa02c'
+      //   }
+      // },
+      // {
+      //   name: '线 3',
+      //   type: 'line',
+      //   showSymbol: true, // 显示数据点
+      //   symbol: 'circle', // 数据点样式
+      //   symbolSize: 6, // 数据点大小
+      //   data: data3,
+      //   lineStyle: {
+      //     color: '#4afafa'
+      //   }
+
+      // {
+      //   name: '线 4',
+      //   type: 'line',
+      //   showSymbol: true, // 显示数据点
+      //   symbol: 'circle', // 数据点样式
+      //   symbolSize: 6, // 数据点大小
+      //   data: data4,
+      //   lineStyle: {
+      //     color: '#ff5f72'
+      //   }
+      // },
+      // {
+      //   name: '线 5',
+      //   type: 'line',
+      //   showSymbol: true, // 显示数据点
+      //   symbol: 'circle', // 数据点样式
+      //   symbolSize: 6, // 数据点大小
+      //   data: data5,
+      //   lineStyle: {
+      //     color: '#8663e1'
+      //   }
     }
   ]
 };

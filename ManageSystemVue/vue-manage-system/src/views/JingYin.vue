@@ -22,7 +22,7 @@
     <div class="example-pagination-block"
          style="padding-left: 10px; width: 100px;height: 50px; position: absolute; left: 10px ; bottom: 250px ">
       <div class="example-demonstration"></div>
-      <el-pagination layout="prev, pager, next" :total="50" page-count="10"/>
+      <el-pagination layout="prev, pager, next" :total="50" page-count="10" @current-change="handleCurrentChange"/>
     </div>
 
   </el-container>
@@ -32,7 +32,6 @@
 import {reactive, ref, onMounted} from "vue";
 import service from "../utils/request";
 import {ElNotification} from 'element-plus'
-import {color} from "echarts";
 
 interface environment {
   humidity: number;
@@ -75,13 +74,20 @@ const tableRowClassName = ({
 // 请求后台数据
 const load = () => {
   service.get('/environment/getTheLatest').then((res) => {
-    state.tableData.push(res.data);
-    humidity = res.data.humidity;
-    temperature = res.data.temperature;
-    fire = res.data.fire;
-    smoke = res.data.smoke;
-    co = res.data.co;
-    risk = res.data.risk;
+    const newData = res.data;
+    // 清空表格数据
+    state.tableData = [];
+    // 将获得的五条数据添加到表格数据中
+    for (let i = 0; i < newData.length; i++) {
+      state.tableData.push(newData[i]);
+    }
+    // 更新数据到界面
+    humidity = state.tableData[state.tableData.length - 1].humidity;
+    temperature = state.tableData[state.tableData.length - 1].temperature;
+    fire = state.tableData[state.tableData.length - 1].fire;
+    smoke = state.tableData[state.tableData.length - 1].smoke;
+    co = state.tableData[state.tableData.length - 1].co;
+    risk = state.tableData[state.tableData.length - 1].risk;
   });
 };
 
@@ -93,6 +99,10 @@ onMounted(() => {
 // 每三秒刷新一次数据
 setInterval(() => {
   state.tableData.shift();
+  state.tableData.shift();
+  state.tableData.shift();
+  state.tableData.shift();
+  state.tableData.shift();
   load();
   if (humidity > 80 || temperature > 50 || fire === 1 || smoke > 80 || co > 20 || risk === 1) {
     ElNotification({
@@ -101,7 +111,13 @@ setInterval(() => {
       type: 'error',
     })
   }
-}, 1000);
+}, 10000);
+
+// 处理分页变化
+const handleCurrentChange = (val) => {
+  // 这里添加处理分页变化的逻辑，你可以在这个函数中重新加载数据
+  // 例如：每次加载五条数据，根据当前页数计算加载的起始索引，然后获取对应数据
+}
 </script>
 
 <style>
@@ -143,5 +159,3 @@ setInterval(() => {
   right: 20px;
 }
 </style>
-
-

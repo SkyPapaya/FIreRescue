@@ -74,7 +74,7 @@ onMounted(() => {
     warningColor.value = warningContent.value === "异常" ? "red" : "black";
 
     // 随机生成距离，保留一位小数，范围在 0 到 10 之间
-    distanceContent.value = `Distance: ${distance}`;
+    distanceContent.value = `距离: ${distance} cm`;
     distanceColor.value = "black"; // 默认将字体颜色设置为黑色
   }, 1000);
 });

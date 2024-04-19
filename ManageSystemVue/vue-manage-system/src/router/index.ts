@@ -36,19 +36,19 @@ const routes: RouteRecordRaw[] = [
                 path: '/NJUPT',
                 name: 'device in NUJPT',
                 meta: {
-                    title: '南京邮电大学设备监控',
+                    title: '万达茂设备监控',
                     permiss: '2',
                 },
-                component: () => import(/* webpackChunkName: "table" */ '../views/NJUPT_device.vue'),
+                component: () => import(/* webpackChunkName: "table" */ '../views/WanDaMao.vue'),
             },
             {
                 path: '/NJU',
                 name: 'device in NJU',
                 meta: {
-                    title: '南京大学设备监控',
+                    title: '金鹰设备监控',
                     permiss: '2',
                 },
-                component: () => import(/* webpackChunkName: "table" */ '../views/NJU_device.vue'),
+                component: () => import(/* webpackChunkName: "table" */ '../views/JingYin.vue'),
             },
             {
                 path: '/charts',
@@ -77,6 +77,16 @@ const routes: RouteRecordRaw[] = [
                     permiss: '14',
                 },
                 component: () => import(/* webpackChunkName: "donate" */ '../views/monitor.vue'),
+            },
+            {
+                path: '/control',
+                name: 'control',
+                meta: {
+                    title: '设备控制',
+                    permiss: '15',
+                },
+                component: () => import(/* webpackChunkName: "donate" */ '../views/control.vue'),
+
             },
             {
                 path: '/permission',
