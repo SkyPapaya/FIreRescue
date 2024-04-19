@@ -166,14 +166,11 @@ def AStarSearch(map, source, dest):
             # not found valid path
             print("can't find valid path")
             break
-
         if location.x == dest.x and location.y == dest.y:
             break
-
         closedlist[location.getPos()] = location
         openlist.pop(location.getPos())
         addAdjacentPositions(map, location, dest, openlist, closedlist)
-
     path = []
     # 在地图中标记逃生路线
     while location is not None:
@@ -189,7 +186,7 @@ HEIGHT = binary_matrix.shape[0]
 map = Map(WIDTH, HEIGHT, binary_matrix)
 count = 0
 
-dest = (380, 480)
+dest = (560, 280)
 while True:
     source_x = int(input("Enter the x-coordinate of the new source point: "))
     source_y = int(input("Enter the y-coordinate of the new source point: "))

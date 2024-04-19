@@ -96,13 +96,13 @@ const items = [
         subs: [
           {
             index: "/NJUPT",
-            title: "南京邮电大学",
+            title: "万达茂",
             permiss: "3",
 
           },
           {
             index: "/NJU",
-            title: "南京大学",
+            title: "金鹰",
             permiss: "3",
 
           },
@@ -130,6 +130,12 @@ const items = [
     title: "生命体征监测",
     permiss: "14",
 
+  },
+  {
+    icon: "Tools",
+    index: "/control",
+    title: "设备控制",
+    permiss: "15",
   }
 ];
 

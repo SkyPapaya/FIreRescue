@@ -19,7 +19,7 @@
         SELECT *
         from environment
             ORDER BY gmt_created DESC
-                LIMIT 1
+                LIMIT 1,10
     </select>
     <insert id="insertEnvironmentDO" parameterType="com.skypapaya.firerescuemanagesystem.DO.EnvironmentDO">
         INSERT INTO environment (co, fire, humidity, risk, smoke, temperature, gmt_created, gmt_modified)

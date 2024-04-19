@@ -4,7 +4,7 @@
 
 <script setup lang="ts">
 import * as echarts from 'echarts';
-import { ref, onMounted } from 'vue';
+import {ref, onMounted} from 'vue';
 import service from "../utils/request";
 
 const chart = ref<HTMLDivElement | null>(null);
@@ -73,11 +73,11 @@ onMounted(() => {
         data: xAxisData
       },
       series: [
-        { data: data },
-        { data: fluctuatedData2 },
-        { data: fluctuatedData3 },
-        { data: fluctuatedData4 },
-        { data: fluctuatedData5 }
+        {data: data},
+        {data: fluctuatedData2},
+        {data: fluctuatedData3},
+        {data: fluctuatedData4},
+        {data: fluctuatedData5}
       ]
     });
 
@@ -149,50 +149,50 @@ option = {
         color: '#ffa02c'
       }
     },
-    {
-      name: '线 2',
-      type: 'line',
-      showSymbol: true, // 显示数据点
-      symbol: 'circle', // 数据点样式
-      symbolSize: 6, // 数据点大小
-      data: [], // 数据在组件挂载后更新
-      lineStyle: {
-        color: '#ffa02c'
-      }
-    },
-    {
-      name: '线 3',
-      type: 'line',
-      showSymbol: true, // 显示数据点
-      symbol: 'circle', // 数据点样式
-      symbolSize: 6, // 数据点大小
-      data: [], // 数据在组件挂载后更新
-      lineStyle: {
-        color: '#4afafa'
-      }
-    },
-    {
-      name: '线 4',
-      type: 'line',
-      showSymbol: true, // 显示数据点
-      symbol: 'circle', // 数据点样式
-      symbolSize: 6, // 数据点大小
-      data: [], // 数据在组件挂载后更新
-      lineStyle: {
-        color: '#ff5f72'
-      }
-    },
-    {
-      name: '线 5',
-      type: 'line',
-      showSymbol: true, // 显示数据点
-      symbol: 'circle', // 数据点样式
-      symbolSize: 6, // 数据点大小
-      data: [], // 数据在组件挂载后更新
-      lineStyle: {
-        color: '#8663e1'
-      }
-    }
+    // {
+    //   name: '线 2',
+    //   type: 'line',
+    //   showSymbol: true, // 显示数据点
+    //   symbol: 'circle', // 数据点样式
+    //   symbolSize: 6, // 数据点大小
+    //   data: [], // 数据在组件挂载后更新
+    //   lineStyle: {
+    //     color: '#ffa02c'
+    //   }
+    // },
+    // {
+    //   name: '线 3',
+    //   type: 'line',
+    //   showSymbol: true, // 显示数据点
+    //   symbol: 'circle', // 数据点样式
+    //   symbolSize: 6, // 数据点大小
+    //   data: [], // 数据在组件挂载后更新
+    //   lineStyle: {
+    //     color: '#4afafa'
+    //   }
+    // },
+    // {
+    //   name: '线 4',
+    //   type: 'line',
+    //   showSymbol: true, // 显示数据点
+    //   symbol: 'circle', // 数据点样式
+    //   symbolSize: 6, // 数据点大小
+    //   data: [], // 数据在组件挂载后更新
+    //   lineStyle: {
+    //     color: '#ff5f72'
+    //   }
+    // },
+    // {
+    //   name: '线 5',
+    //   type: 'line',
+    //   showSymbol: true, // 显示数据点
+    //   symbol: 'circle', // 数据点样式
+    //   symbolSize: 6, // 数据点大小
+    //   data: [], // 数据在组件挂载后更新
+    //   lineStyle: {
+    //     color: '#8663e1'
+    //   }
+    // }
   ]
 };
 </script>

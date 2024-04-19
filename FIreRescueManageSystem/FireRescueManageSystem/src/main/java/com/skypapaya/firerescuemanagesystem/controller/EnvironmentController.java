@@ -4,6 +4,9 @@ import com.skypapaya.firerescuemanagesystem.DO.EnvironmentDO;
 import com.skypapaya.firerescuemanagesystem.model.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
 @RestController
 public class EnvironmentController {
     @Autowired
@@ -12,14 +15,14 @@ public class EnvironmentController {
     @GetMapping("environment/getTheLatest")
     public Result getTheLasted() {
         Result result = new Result();
-        EnvironmentDO environment = environmentDAO.getTheLatest();
-        if (environment == null) {
+        List<EnvironmentDO> environmentDOS = environmentDAO.getTheLatest();
+        if (environmentDOS == null) {
             result.setCode("404");
             result.setMessage("没有数据");
             return result;
         }
-        result.setData(environment);
-        return Result.success(environment);
+        result.setData(environmentDOS);
+        return Result.success(environmentDOS);
     }
     //插入数据
     @ResponseBody

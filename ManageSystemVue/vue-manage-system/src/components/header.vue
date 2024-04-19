@@ -5,7 +5,7 @@
       <el-icon v-if="sidebar.collapse"><Expand /></el-icon>
       <el-icon v-else><Fold /></el-icon>
     </div>
-    <div class="logo">往生者后台管理系统</div>
+    <div class="logo">觅生者后台管理系统</div>
     <div class="header-right">
       <div class="header-user-con">
         <!-- 消息中心 -->
