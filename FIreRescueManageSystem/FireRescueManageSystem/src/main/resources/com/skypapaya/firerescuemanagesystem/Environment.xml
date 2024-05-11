@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.skypapaya.firerescuemanagesystem.DAO.EnvironmentDAO">
+
+    <resultMap id="environmentResultMap" type="com.skypapaya.firerescuemanagesystem.DO.EnvironmentDO">
+        <id column="id" property="id"/>
+        <result column="co" property="co"/>
+        <result column="fire" property="fire"/>
+        <result column="humidity" property="humidity"/>
+        <result column="risk" property="risk"/>
+        <result column="smoke" property="smoke"/>
+        <result column="temperature" property="temperature"/>
+        <result column="gmt_created" property="createTime"/>
+        <result column="gmt_modified" property="modifyTime"/>
+    </resultMap>
+
+    <select id="getTheLatest" resultMap="environmentResultMap">
+        SELECT *
+        from environment
+            ORDER BY gmt_created DESC
+                LIMIT 1,10
+    </select>
+    <insert id="insertEnvironmentDO" parameterType="com.skypapaya.firerescuemanagesystem.DO.EnvironmentDO">
+        INSERT INTO environment (co, fire, humidity, risk, smoke, temperature, gmt_created, gmt_modified)
+        VALUES (#{co}, #{fire}, #{humidity}, #{risk}, #{smoke}, #{temperature}, now(), now())
+    </insert>
+
+</mapper>
