@@ -4,6 +4,7 @@ import numpy as np
 from numpy.random import randint
 
 
+# 400 360
 def convert_to_binary(img):
     # 转换为灰度图
     gray_img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
@@ -187,10 +188,35 @@ map = Map(WIDTH, HEIGHT, binary_matrix)
 count = 0
 
 dest = (560, 280)
-while True:
-    source_x = int(input("Enter the x-coordinate of the new source point: "))
-    source_y = int(input("Enter the y-coordinate of the new source point: "))
-    source = (source_x, source_y)
+
+# 多个起始坐标
+source_coordinates = [(400, 400), (420, 410), (440, 420),(600,450),(300,500)]  # 你可以根据需要添加更多起始坐标
+
+# 存储所有路径的列表
+all_paths = []
+
+# 对每个起始坐标进行路径搜索
+for source in source_coordinates:
     path = AStarSearch(map, source, dest)
-    map_data = map.getMap()
-    showMapWithColors(map_data, source, dest, path)
+    all_paths.append(path)
+
+# 在同一张图上展示所有路径
+map_data = map.getMap()
+plt.figure(figsize=(8, 8))
+plt.imshow(map_data, cmap='binary', interpolation='nearest', vmin=0, vmax=3)
+
+# 标记终点
+plt.scatter(dest[0], dest[1], color='purple', s=50, marker='x', label='End')
+
+# 循环标记每个起点和对应的路径
+for i, source in enumerate(source_coordinates):
+    plt.scatter(source[0], source[1], color='blue', s=50, marker='o', label=f'Start {i + 1}')
+    if all_paths[i]:
+        path_array = np.array(all_paths[i])
+        plt.plot(path_array[:, 0], path_array[:, 1], linewidth=3, label=f'Path {i + 1}')
+
+plt.legend()
+plt.title('Map with Paths')
+plt.xticks([])
+plt.yticks([])
+plt.show()
