@@ -4,7 +4,7 @@ import numpy as np
 from numpy.random import randint
 
 
-# 400 360
+# 转换图像为二值矩阵
 def convert_to_binary(img):
     # 转换为灰度图
     gray_img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
@@ -24,21 +24,8 @@ def convert_to_binary(img):
 # 读取图像
 image_path = './img/image1.png'
 image = cv2.imread(image_path)
-
-# 转换为只含有0和1的矩阵
 binary_matrix = convert_to_binary(image)
-
-
-class SearchEntry():
-    def __init__(self, x, y, g_cost, f_cost=0, pre_entry=None):
-        self.x = x
-        self.y = y
-        self.g_cost = g_cost
-        self.f_cost = f_cost
-        self.pre_entry = pre_entry
-
-    def getPos(self):
-        return (self.x, self.y)
+print(binary_matrix)
 
 
 # 初始化map类，定义地图的长宽，并设置保存地图信息的二维数据map的值为0，0表示可以移动到这个点
@@ -87,6 +74,17 @@ def showMapWithColors(map, start, end, path=None):
 
 # A*算法找路
 def AStarSearch(map, source, dest):
+    class SearchEntry():
+        def __init__(self, x, y, g_cost, f_cost=0, pre_entry=None):
+            self.x = x
+            self.y = y
+            self.g_cost = g_cost
+            self.f_cost = f_cost
+            self.pre_entry = pre_entry
+
+        def getPos(self):
+            return (self.x, self.y)
+
     def getNewPosition(map, location, offset):
         # 获取新位置的坐标
         # 通过offset进行上下左右移动或者斜线移动
@@ -190,7 +188,7 @@ count = 0
 dest = (560, 280)
 
 # 多个起始坐标
-source_coordinates = [(400, 400), (420, 410), (440, 420),(600,450),(300,500)]  # 你可以根据需要添加更多起始坐标
+source_coordinates = [(400, 400), (420, 410), (440, 420), (600, 450), (300, 500)]  # 你可以根据需要添加更多起始坐标
 
 # 存储所有路径的列表
 all_paths = []
