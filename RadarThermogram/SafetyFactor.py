@@ -1,7 +1,19 @@
 import matplotlib.pyplot as plt
-from collections import deque
 import cv2
 import numpy as np
+import pandas as pd
+import seaborn as sns
+from collections import deque
+
+
+# 安全值权重计算
+def safety_factor(temperature, humidity, smoke):
+    return temperature * 0.1 + humidity * 0.1 + smoke * 0.8
+
+
+# 实时刷新目前获取的数据
+def renew_safety_factor(temperature, humidity, smoke):
+    return 1
 
 
 def convert_to_binary(img):
@@ -36,7 +48,8 @@ def mark_near_by(current, building):
     for i in range(current[0] - 2, current[0] + 3):
         for j in range(current[1] - 2, current[1] + 3):
             if 0 <= i < len(building) and 0 <= j < len(building[0]) and building[i][j] == 0:
-                building[i][j] = 1
+                building[i][j] = 0.6
+
     return current
 
 
@@ -71,21 +84,15 @@ def combined_search(building, start):
 # 调用算法函数获取遍历路径
 path = combined_search(building, start)
 
-# 可视化
+# 将二值矩阵转换为DataFrame
+df = pd.DataFrame(building)
+
+# 设置颜色映射
+cmap = "RdYlGn_r"  # 选择热力图颜色映射，rocket_r表示从黄色到红色的渐变
+
+# 绘制热力图
 plt.figure(figsize=(8, 8))  # 设置图像大小
-plt.imshow(building, cmap='Greys', origin='lower')  # 显示建筑地图，1表示白色（可通过），0表示黑色（障碍物）
-
-# 绘制起始点
-plt.plot(start[1], start[0], 'rx', markersize=10)  # 红色'x'标记起始位置
-
-# 绘制路径
-if path:
-    path_x, path_y = zip(*path)  # 分离路径的x和y坐标
-    plt.plot(path_y, path_x, marker='o', color='blue')  # 绘制蓝色路径
+sns.heatmap(df, cmap=cmap, square=True, cbar=False)  # 绘制热力图，square=True表示将每个单元格的宽度和高度设置为相等
 
 plt.gca().invert_yaxis()  # 反转y轴，使(0,0)在左上角
 plt.show()  # 显示图像
-
-# 输出路径坐标
-if path:
-    print("路径坐标:", path)
