@@ -20,14 +20,14 @@ def convert_to_binary(img):
 
 
 # 读取图像
-image_path = './img/image1.png'
+image_path = './img/map_new.png'
 image = cv2.imread(image_path)
 
 # 转换为只含有0和1的矩阵
 building = convert_to_binary(image)
 
 # 定义起始位置
-start = (400, 400)  # 起始位置
+start = (250, 400)  # 起始位置
 
 
 # 以现在点为中心将附近的临近点标记为以探索

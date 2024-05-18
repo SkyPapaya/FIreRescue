@@ -32,7 +32,7 @@ def convert_to_binary(img):
 
 
 # 读取图像
-image_path = './img/image1.png'
+image_path = './img/map_new.png'
 image = cv2.imread(image_path)
 
 # 转换为只含有0和1的矩阵
@@ -83,6 +83,7 @@ def combined_search(building, start):
 
 # 调用算法函数获取遍历路径
 path = combined_search(building, start)
+print(path)
 
 # 将二值矩阵转换为DataFrame
 df = pd.DataFrame(building)
