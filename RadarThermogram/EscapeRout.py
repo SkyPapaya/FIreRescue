@@ -17,7 +17,6 @@ def convert_to_binary(img):
 
     # 将二值图像转换为只含有0和1的矩阵
     binary_matrix = (inverted_binary_img / 255).astype(np.uint8)
-    print(binary_matrix.shape)
     return binary_matrix
 
 
@@ -25,7 +24,6 @@ def convert_to_binary(img):
 image_path = './img/image1.png'
 image = cv2.imread(image_path)
 binary_matrix = convert_to_binary(image)
-print(binary_matrix)
 
 
 # 初始化map类，定义地图的长宽，并设置保存地图信息的二维数据map的值为0，0表示可以移动到这个点
@@ -175,7 +173,6 @@ def AStarSearch(map, source, dest):
     while location is not None:
         path.append(location.getPos())
         location = location.pre_entry
-    print(path)
     return path
 
 

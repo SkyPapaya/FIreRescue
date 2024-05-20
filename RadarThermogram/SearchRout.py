@@ -71,21 +71,23 @@ def combined_search(building, start):
 # 调用算法函数获取遍历路径
 path = combined_search(building, start)
 
-# 可视化
-plt.figure(figsize=(8, 8))  # 设置图像大小
-plt.imshow(building, cmap='Greys', origin='lower')  # 显示建筑地图，1表示白色（可通过），0表示黑色（障碍物）
-
-# 绘制起始点
-plt.plot(start[1], start[0], 'rx', markersize=10)  # 红色'x'标记起始位置
-
-# 绘制路径
-if path:
-    path_x, path_y = zip(*path)  # 分离路径的x和y坐标
-    plt.plot(path_y, path_x, marker='o', color='blue')  # 绘制蓝色路径
-
-plt.gca().invert_yaxis()  # 反转y轴，使(0,0)在左上角
-plt.show()  # 显示图像
-
+'''
 # 输出路径坐标
 if path:
     print("路径坐标:", path)
+
+    # 可视化
+    plt.figure(figsize=(8, 8))  # 设置图像大小
+    plt.imshow(building, cmap='Greys', origin='lower')  # 显示建筑地图，1表示白色（可通过），0表示黑色（障碍物）
+
+    # 绘制起始点
+    plt.plot(start[1], start[0], 'rx', markersize=10)  # 红色'x'标记起始位置
+
+    # 绘制路径
+    if path:
+        path_x, path_y = zip(*path)  # 分离路径的x和y坐标
+        plt.plot(path_y, path_x, marker='o', color='blue')  # 绘制蓝色路径
+
+    plt.gca().invert_yaxis()  # 反转y轴，使(0,0)在左上角
+    plt.show()  # 显示图像
+'''
