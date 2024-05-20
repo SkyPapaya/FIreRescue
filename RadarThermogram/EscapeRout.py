@@ -21,7 +21,7 @@ def convert_to_binary(img):
 
 
 # 读取图像
-image_path = './img/image1.png'
+image_path = './img/map_new.png'
 image = cv2.imread(image_path)
 binary_matrix = convert_to_binary(image)
 
@@ -182,10 +182,10 @@ HEIGHT = binary_matrix.shape[0]
 map = Map(WIDTH, HEIGHT, binary_matrix)
 count = 0
 
-dest = (560, 280)
+dest = (700, 220)
 
 # 多个起始坐标
-source_coordinates = [(400, 400), (420, 410), (440, 420), (600, 450), (300, 500)]  # 你可以根据需要添加更多起始坐标
+source_coordinates = [(400, 220)]  # 你可以根据需要添加更多起始坐标
 
 # 存储所有路径的列表
 all_paths = []

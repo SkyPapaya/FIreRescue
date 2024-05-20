@@ -1,7 +1,7 @@
 from PIL import Image
 
 # 打开图片
-image_path = './img/red_position.png'  # 替换为你的图片路径
+image_path = '../img/red_position.png'  # 替换为你的图片路径
 image = Image.open(image_path)
 
 # 获取图片的大小
