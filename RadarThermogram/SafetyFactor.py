@@ -3,14 +3,20 @@ import cv2
 import numpy as np
 import pandas as pd
 import seaborn as sns
-from collections import deque
-import SearchRout as SearchRout
+import SearchRoute as sr
+import GetPosition as gp
+
+
 # 计算安全值权重
 def safety_factor(temperature=1, humidity=2, smoke=3):
     return temperature * 0.1 + humidity * 0.1 + smoke * 0.8
+
+
 # 根据传感器读数更新安全系数
 def renew_safety_factor(temperature, humidity, smoke):
     return safety_factor(temperature, humidity, smoke)
+
+
 # 将图像转换为二值矩阵
 def convert_to_binary(img):
     # 转换为灰度图
@@ -25,6 +31,8 @@ def convert_to_binary(img):
     # 将二值图像转换为只含有0和1的矩阵
     binary_matrix = (inverted_binary_img / 255).astype(np.uint8)
     return binary_matrix
+
+
 # 读取图像
 image_path = './img/map_new.png'
 image = cv2.imread(image_path)
@@ -38,10 +46,9 @@ rows, cols = building.shape
 # 确认起始位置在图像范围内
 start = (min(400, rows - 1), min(400, cols - 1))  # 起始位置
 
-
 # 主函数
 # 初始化无人机当前位置
-positionX, positionY = min(240, rows - 1), min(400, cols - 1)
+positionX, positionY = gp.get_initial_position()
 
 # 设置初始传感器参数
 smoke = 1
@@ -52,7 +59,7 @@ temperature = 2
 safety_factor_data = safety_factor(smoke, humidity, temperature)
 
 # 执行搜索以获取路径
-path = SearchRout.path
+path = sr.get_initial_path(building, start)
 
 # 动态更新建筑矩阵中的安全系数
 for pos in path:

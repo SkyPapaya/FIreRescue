@@ -2,7 +2,7 @@ from PIL import Image
 import numpy as np
 
 # 打开图片
-image_path = "./img/map_new.png"
+image_path = "./img/test_map_1.png"
 img = Image.open(image_path)
 img_rgb = img.convert("RGB")
 img_array = np.array(img_rgb)
@@ -12,7 +12,7 @@ h, w, _ = img_array.shape
 print(f"Image dimensions: {h} x {w}")
 
 # 指定修改像素点的位置
-pos = [[230, 400], [230, 401], [230, 402], [230, 403]]
+pos = [(1000, 779), (1000, 784), (1000, 780), (1000, 781)]
 
 # 修改指定位置的像素点为红色
 for y, x in pos:
@@ -31,13 +31,10 @@ from PIL import ImageGrab
 import pyautogui
 
 # 定义截图区域 (left, top, width, height)
-region = (100, 100, 300, 300)
+region = (0, 100, 300, 300)
 
 # 获取特定区域的屏幕截图
 screenshot = pyautogui.screenshot(region=region)
-
-# 显示截图
-screenshot.show()
 
 # 保存截图
 screenshot.save("screenshot_region.png")
