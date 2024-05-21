@@ -5,6 +5,7 @@ import pandas as pd
 import seaborn as sns
 import SearchRoute as sr
 import GetPosition as gp
+import GetData as data
 
 
 # import rospy
@@ -15,12 +16,12 @@ import GetPosition as gp
 #     return msg.data
 # 计算安全值权重
 def safety_factor(smoke, co, fire, temperature, humidity):
-    return temperature * 0.1 + humidity * 0.1 + smoke * 0.8
+    return smoke * 0.2 + co * 0.2 + fire * 0.2 + temperature * 0.2 + humidity * 0.2
 
 
 # 根据传感器读数更新安全系数
-def renew_safety_factor(temperature, humidity, smoke, co, fire):
-    return safety_factor(temperature, humidity, smoke, co, fire)
+def renew_safety_factor(smoke, co, fire, temperature, humidity):
+    return safety_factor(smoke, co, fire, temperature, humidity)
 
 
 # 将图像转换为二值矩阵
@@ -73,12 +74,14 @@ def get_data_frame():
     # 动态更新建筑矩阵中的安全系数
     for pos in path:
         # 模拟传感器数据更新
-        smoke = np.random.randint(1, 4)
-        humidity = np.random.randint(1, 3)
-        temperature = np.random.randint(1, 3)
+        smoke = data.get_sensor_values()[0]
+        co = data.get_sensor_values()[1]
+        fire = data.get_sensor_values()[2]
+        temperature = data.get_sensor_values()[3]
+        humidity = data.get_sensor_values()[4]
 
         # 根据更新的传感器数据更新安全系数
-        safety_factor_data = renew_safety_factor(temperature, humidity, smoke, co, fire)
+        safety_factor_data = renew_safety_factor(smoke, co, fire, temperature, humidity)
 
         # 更新当前路径点的建筑矩阵
         building[pos[0]][pos[1]] = safety_factor_data

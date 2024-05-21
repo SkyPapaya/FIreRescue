@@ -1,5 +1,5 @@
 import numpy as np
-from DronePosition import PoseSubscriber
+import GetData as gd
 
 
 def get_human_pos(angle, Xp_drone, Yp_drone):
@@ -13,24 +13,18 @@ def get_human_pos(angle, Xp_drone, Yp_drone):
     # 定义人相对无人机的坐标向量
     relative_position = np.array([[Xp_drone], [Yp_drone]])
 
-#允许传入多个人的坐标
     # 将人相对无人机的坐标转换为世界坐标系下的坐标
-    person_position = np.dot(rotation_matrix, relative_position)
-    person_position = tuple(person_position.flatten())
+    # 目前只实现单人路线规划
+    person_relative_position = np.dot(rotation_matrix, relative_position)
+    person_relative_position = tuple(person_relative_position.flatten())
+    person_relative_position[0] += gd.get_person_pos_values[0][0]
+    person_relative_position[1] += gd.get_person_pos_values[0][1]
 
     # 保留3位小数
-    person_position = tuple([round(i, 3) for i in person_position])
+    person_relative_position = tuple([round(i, 3) for i in person_relative_position])
 
     # 输出人位于世界坐标系的坐标
-    # 实例化PoseSubscriber类
-    pose_sub = PoseSubscriber()
-    # 调用spin方法开始订阅
-    pose_sub.spin()
-    # 获取最新的xy坐标值
-    latest_x, latest_y = pose_sub.get_latest_xy()
-    person_position[0] += latest_x
-    person_position[1] += latest_y
-    return person_position
+    return person_relative_position
 
 
 world_position = get_human_pos(np.pi / 4, 0, 5)
