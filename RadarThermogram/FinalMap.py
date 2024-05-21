@@ -1,5 +1,6 @@
 import GetPosition as gp
 import SearchRoute as sr
+import Draw as dr
 
 if __name__ == '__main__':
     # 无人机最后的位置
@@ -14,3 +15,5 @@ if __name__ == '__main__':
         for pos in path:
             file.write(f"{pos}\n")
     print("路径保存成功！")
+    # 获取叠加图片
+    dr.get_final_map()

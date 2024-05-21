@@ -155,7 +155,7 @@ option = {
     //   showSymbol: true, // 显示数据点
     //   symbol: 'circle', // 数据点样式
     //   symbolSize: 6, // 数据点大小
-    //   data: [], // 数据在组件挂载后更新
+    //   data.txt: [], // 数据在组件挂载后更新
     //   lineStyle: {
     //     color: '#ffa02c'
     //   }
@@ -166,7 +166,7 @@ option = {
     //   showSymbol: true, // 显示数据点
     //   symbol: 'circle', // 数据点样式
     //   symbolSize: 6, // 数据点大小
-    //   data: [], // 数据在组件挂载后更新
+    //   data.txt: [], // 数据在组件挂载后更新
     //   lineStyle: {
     //     color: '#4afafa'
     //   }
@@ -177,7 +177,7 @@ option = {
     //   showSymbol: true, // 显示数据点
     //   symbol: 'circle', // 数据点样式
     //   symbolSize: 6, // 数据点大小
-    //   data: [], // 数据在组件挂载后更新
+    //   data.txt: [], // 数据在组件挂载后更新
     //   lineStyle: {
     //     color: '#ff5f72'
     //   }
@@ -188,7 +188,7 @@ option = {
     //   showSymbol: true, // 显示数据点
     //   symbol: 'circle', // 数据点样式
     //   symbolSize: 6, // 数据点大小
-    //   data: [], // 数据在组件挂载后更新
+    //   data.txt: [], // 数据在组件挂载后更新
     //   lineStyle: {
     //     color: '#8663e1'
     //   }
