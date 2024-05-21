@@ -1,5 +1,5 @@
 import numpy as np
-import DronePosition as dp
+from DronePosition import PoseSubscriber
 
 
 def get_human_pos(angle, Xp_drone, Yp_drone):
@@ -22,8 +22,14 @@ def get_human_pos(angle, Xp_drone, Yp_drone):
     person_position = tuple([round(i, 3) for i in person_position])
 
     # 输出人位于世界坐标系的坐标
-    person_position[0] += dp.poseCallback[0]
-    person_position[1] += dp.poseCallback[1]
+    # 实例化PoseSubscriber类
+    pose_sub = PoseSubscriber()
+    # 调用spin方法开始订阅
+    pose_sub.spin()
+    # 获取最新的xy坐标值
+    latest_x, latest_y = pose_sub.get_latest_xy()
+    person_position[0] += latest_x
+    person_position[1] += latest_y
     return person_position
 
 
