@@ -1,9 +1,8 @@
-import GetPosition as gp
-import SearchRoute as sr
+import EscapeRout as er
 
 if __name__ == '__main__':
-    # 无人机最后的位置
-    initial_position = gp.get_initial_position()
-    print(initial_position)
-    # 根据无人机位置修正后的路径信息
-    path = sr.get_path()
+    # 出口
+    dest = (700, 220)
+    # 起点
+    source_coordinates = [(400, 220)]
+    er.get_escape_route(dest, source_coordinates)

@@ -129,52 +129,55 @@ WIDTH = binary_matrix.shape[1]
 HEIGHT = binary_matrix.shape[0]
 
 map = Map(WIDTH, HEIGHT, binary_matrix)
-dest = (700, 220)
-source_coordinates = [(400, 220)]
-all_paths = []
-
-for source in source_coordinates:
-    path = AStarSearch(map, source, dest)
-    all_paths.append(path)
 
 
-# 动态更新建筑矩阵中的安全系数
-def safety_factor(smoke, temperature, humidity):
-    return temperature * 0.1 + humidity * 0.1 + smoke * 0.8
+# ---------
+def get_escape_route(dest, source_coordinates):
+    all_paths = []
 
+    for source in source_coordinates:
+        path = AStarSearch(map, source, dest)
+        all_paths.append(path)
 
-def renew_safety_factor(temperature, humidity, smoke):
-    return safety_factor(temperature, humidity, smoke)
+    # 动态更新建筑矩阵中的安全系数
+    def safety_factor(smoke, temperature, humidity):
+        return temperature * 0.1 + humidity * 0.1 + smoke * 0.8
 
+    def renew_safety_factor(temperature, humidity, smoke):
+        return safety_factor(temperature, humidity, smoke)
 
-for pos in path:
-    smoke = np.random.randint(1, 4)
-    humidity = np.random.randint(1, 3)
-    temperature = np.random.randint(1, 3)
-    safety_factor_data = renew_safety_factor(temperature, humidity, smoke)
-    binary_matrix[pos[1], pos[0]] = safety_factor_data
+    for pos in path:
+        smoke = np.random.randint(1, 4)
+        humidity = np.random.randint(1, 3)
+        temperature = np.random.randint(1, 3)
+        safety_factor_data = renew_safety_factor(temperature, humidity, smoke)
+        binary_matrix[pos[1], pos[0]] = safety_factor_data
 
-df = pd.DataFrame(binary_matrix)
-cmap = "RdYlGn_r"
+    df = pd.DataFrame(binary_matrix)
+    cmap = "RdYlGn_r"
 
-# 叠加图像
-plt.figure(figsize=(12, 12))
-# 绘制安全系数热力图
-sns.heatmap(df, cmap=cmap, square=True, cbar=True, alpha=0.6)
-plt.gca().invert_yaxis()
+    # 叠加图像
+    plt.figure(figsize=(12, 12))
+    # 绘制安全系数热力图
+    sns.heatmap(df, cmap=cmap, square=True, cbar=True, alpha=0.6)
+    plt.gca().invert_yaxis()
 
-# 绘制路径地图
-plt.imshow(map.getMap(), cmap='binary', interpolation='nearest', vmin=0, vmax=3, alpha=0.4)
-plt.scatter(dest[0], dest[1], color='purple', s=50, marker='x', label='End')
-for i, source in enumerate(source_coordinates):
-    plt.scatter(source[0], source[1], color='blue', s=50, marker='o', label=f'Start {i + 1}')
-    if all_paths[i]:
-        path_array = np.array(all_paths[i])
-        plt.plot(path_array[:, 0], path_array[:, 1], linewidth=3, label=f'Path {i + 1}')
+    # 绘制路径地图
+    plt.imshow(map.getMap(), cmap='binary', interpolation='nearest', vmin=0, vmax=3, alpha=0.4)
+    plt.scatter(dest[0], dest[1], color='purple', s=50, marker='x', label='End')
+    for i, source in enumerate(source_coordinates):
+        plt.scatter(source[0], source[1], color='blue', s=50, marker='o', label=f'Start {i + 1}')
+        if all_paths[i]:
+            path_array = np.array(all_paths[i])
+            plt.plot(path_array[:, 0], path_array[:, 1], linewidth=3, label=f'Path {i + 1}')
 
-plt.legend()
-plt.title('Map with Paths and Safety Factor Heatmap')
-plt.xticks([])
-plt.yticks([])
+    plt.legend()
+    plt.title('Map with Paths and Safety Factor Heatmap')
 
-plt.show()
+    # 显示坐标轴
+    x_ticks = np.arange(0, WIDTH, 50)  # 设置x轴每隔50个像素显示一个刻度
+    y_ticks = np.arange(0, HEIGHT, 50)  # 设置y轴每隔50个像素显示一个刻度
+    plt.xlabel('X Coordinate')
+    plt.ylabel('Y Coordinate')
+
+    plt.show()
