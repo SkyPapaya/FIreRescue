@@ -13,7 +13,7 @@ let now = new Date();
 let data: any[] = [];
 let xAxisData: string[] = [];
 let option: echarts.EChartsOption;
-let risk;
+let risk = 0.05;
 
 const load = () => {
   service.get('environment/getTheLatest').then((res) => {

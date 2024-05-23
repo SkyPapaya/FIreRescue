@@ -80,21 +80,20 @@ let option: EChartsOption = {
     }
   }
 };
-let humidity;
+let humidity = 1;
 let temperature;
-let people;
 let fire;
 let co;
 let smoke;
 //获取数据
 const load = () => {
   service.get('environment/getTheLatest').then((res) => {
-    humidity = res.data.humidity;
-    temperature = res.data.temperature;
-    people = res.data.people;
-    fire = res.data.fire * 100;
-    co = res.data.co;
-    smoke = res.data.smoke;
+   // console.log(res.data[0].co);
+    humidity = res.data[0].humidity;
+    temperature = res.data[0].temperature;
+    fire = res.data[0].fire * 100;
+    co = res.data[0].co;
+    smoke = res.data[0].smoke;
     // 替换数据
     option.dataset[0].source = [
       ['湿度', humidity],
@@ -112,7 +111,6 @@ onMounted(() => {
   myChart.setOption(option);
 
   setInterval(() => {
-
     load();
     // 根据第二个数据排序
     option.dataset[0].source.sort((a: any, b: any) => b[1] - a[1]);

@@ -4,6 +4,7 @@ import numpy as np
 import pandas as pd
 import seaborn as sns
 from numpy.random import randint
+from PIL import Image
 
 
 # 转换图像为二值矩阵
@@ -16,12 +17,19 @@ def convert_to_binary(img):
 
 
 # 读取图像
-image_path = './img/map_new.png'
+# 打开PGM文件
+# pgm_image = Image.open('./img/map.pgm')
+
+# 将其转换为PNG并保存
+# pgm_image.save('./img/map.png')
+image_path = './img/map.png'
 image = cv2.imread(image_path)
 binary_matrix = convert_to_binary(image)
 
 
 # 初始化Map类
+
+
 class Map():
     def __init__(self, width, height, binary_matrix):
         self.width = width
@@ -164,19 +172,21 @@ def get_escape_route(dest, source_coordinates):
 
     # 绘制路径地图
     plt.imshow(map.getMap(), cmap='binary', interpolation='nearest', vmin=0, vmax=3, alpha=0.4)
-    plt.scatter(dest[0], dest[1], color='purple', s=50, marker='x', label='End')
+    plt.scatter(dest[0], dest[1], color='purple', s=60, marker='x', label='End')  # 修改目标点标识大小
     for i, source in enumerate(source_coordinates):
-        plt.scatter(source[0], source[1], color='blue', s=50, marker='o', label=f'Start {i + 1}')
+        # 修改起点大小
+        plt.scatter(source[0], source[1], color='blue', s=20, marker='o', label=f'Start {i + 1}')
         if all_paths[i]:
             path_array = np.array(all_paths[i])
-            plt.plot(path_array[:, 0], path_array[:, 1], linewidth=3, label=f'Path {i + 1}')
+            # 可以设置路径宽度
+            plt.plot(path_array[:, 0], path_array[:, 1], linewidth=1, label=f'Path {i + 1}')
 
     plt.legend()
     plt.title('Map with Paths and Safety Factor Heatmap')
 
     # 显示坐标轴
-    x_ticks = np.arange(0, WIDTH, 50)  # 设置x轴每隔50个像素显示一个刻度
-    y_ticks = np.arange(0, HEIGHT, 50)  # 设置y轴每隔50个像素显示一个刻度
+    # x_ticks = np.arange(0, WIDTH, 50)  # 设置x轴每隔50个像素显示一个刻度
+    # y_ticks = np.arange(0, HEIGHT, 50)  # 设置y轴每隔50个像素显示一个刻度
     plt.xlabel('X Coordinate')
     plt.ylabel('Y Coordinate')
 
