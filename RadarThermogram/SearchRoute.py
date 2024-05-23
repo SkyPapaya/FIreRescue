@@ -72,35 +72,9 @@ def get_path(building, start):
     # 将path中的坐标点根据无人机初始坐标偏移
     for i in range(len(path)):
         path[i] = (path[i][0] - x, path[i][1] - y)
+    print(path)
     return path  # 返回覆盖所有区域的路径
 
 
-def get_initial_path(building, start):
-    rows, cols = len(building), len(building[0])  # 获取建筑的行数和列数
-    directions = [(0, 4), (0, -3), (4, 0), (-3, 0)]  # 定义四个移动方向：右、左、下、上 (在这里定义无人机的搜索能力# )
-    stack = [start]  # 使用栈来实现深度优先搜索（DFS）
-    queue = deque([start])  # 使用队列来记录已经探索过但还未完全展开的节点
-    visited = set()  # 记录已访问的节点
-    path = []  # 记录遍历路径
-
-    while stack or queue:  # 当栈或队列不为空时继续循环
-        if stack:  # 优先使用DFS
-            current = stack.pop()
-        else:  # 当栈为空时，使用队列中的节点继续搜索
-            current = queue.popleft()
-
-        if current not in visited:  # 如果当前节点未被访问
-            visited.add(mark_near_by(current, building))  # 将当前节点标记为已访问
-            path.append(current)  # 将当前节点添加到路径中
-            for direction in directions:  # 遍历所有可能的移动方向
-                neighbor = (current[0] + direction[0], current[1] + direction[1])
-                if 0 <= neighbor[0] < rows and 0 <= neighbor[1] < cols:  # 检查邻居节点是否在建筑范围内
-                    if building[neighbor[0]][neighbor[1]] == 0 and neighbor not in visited:  # 检查邻居节点是否可通过且未访问
-                        stack.append(neighbor)  # 将邻居节点添加到栈中
-                        queue.append(neighbor)  # 将邻居节点添加到队列中
-
-    return path  # 返回覆盖所有区域的路径
-
-
-def get_changed_path():
-    return get_path(building, start)
+if __name__ == '__main__':
+    path = get_path(building, start)

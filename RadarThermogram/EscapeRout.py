@@ -1,10 +1,9 @@
 import matplotlib.pyplot as plt
 import cv2
 import numpy as np
-from numpy.random import randint
+import pandas as pd
 import seaborn as sns
-import SafetyFactor as sf
-import PersonPosition as pp
+from numpy.random import randint
 
 
 # 转换图像为二值矩阵
@@ -22,7 +21,7 @@ image = cv2.imread(image_path)
 binary_matrix = convert_to_binary(image)
 
 
-# 初始化map类
+# 初始化Map类
 class Map():
     def __init__(self, width, height, binary_matrix):
         self.width = width
@@ -104,7 +103,6 @@ def AStarSearch(map, source, dest):
                 fast = entry
         return fast
 
-    # def get_final_map():
     openlist = {}
     closedlist = {}
     location = SearchEntry(source[0], source[1], 0.0)
@@ -127,42 +125,56 @@ def AStarSearch(map, source, dest):
     return path
 
 
-def get_final_map():
-    WIDTH = binary_matrix.shape[1]
-    HEIGHT = binary_matrix.shape[0]
+WIDTH = binary_matrix.shape[1]
+HEIGHT = binary_matrix.shape[0]
 
-    map = Map(WIDTH, HEIGHT, binary_matrix)
-    dest = pp.get_human_pos()
-    source_coordinates = [(400, 220)]
+map = Map(WIDTH, HEIGHT, binary_matrix)
+dest = (700, 220)
+source_coordinates = [(400, 220)]
+all_paths = []
 
-    all_paths = []
+for source in source_coordinates:
+    path = AStarSearch(map, source, dest)
+    all_paths.append(path)
 
-    for source in source_coordinates:
-        path = AStarSearch(map, source, dest)
-        all_paths.append(path)
 
-    # 获取地图和安全系数数据
-    map_data = map.getMap()
-    safety_data = sf.get_data_frame()
+# 动态更新建筑矩阵中的安全系数
+def safety_factor(smoke, temperature, humidity):
+    return temperature * 0.1 + humidity * 0.1 + smoke * 0.8
 
-    # 设置图表
-    plt.figure(figsize=(8, 8))
 
-    # 绘制热力图
-    cmap = "RdYlGn_r"
-    sns.heatmap(safety_data, cmap=cmap, square=True, cbar=True, xticklabels=False, yticklabels=False)
+def renew_safety_factor(temperature, humidity, smoke):
+    return safety_factor(temperature, humidity, smoke)
 
-    # 标记终点
-    plt.scatter(dest[0], dest[1], color='purple', s=50, marker='x', label='End')
 
-    # 循环标记每个起点和对应的路径
-    for i, source in enumerate(source_coordinates):
-        plt.scatter(source[0], source[1], color='blue', s=50, marker='o', label=f'Start {i + 1}')
-        if all_paths[i]:
-            path_array = np.array(all_paths[i])
-            plt.plot(path_array[:, 0], path_array[:, 1], linewidth=3, label=f'Path {i + 1}')
+for pos in path:
+    smoke = np.random.randint(1, 4)
+    humidity = np.random.randint(1, 3)
+    temperature = np.random.randint(1, 3)
+    safety_factor_data = renew_safety_factor(temperature, humidity, smoke)
+    binary_matrix[pos[1], pos[0]] = safety_factor_data
 
-    plt.gca().invert_yaxis()
-    plt.legend()
-    plt.title('Map with Paths on Safety Heatmap')
-    plt.show()
+df = pd.DataFrame(binary_matrix)
+cmap = "RdYlGn_r"
+
+# 叠加图像
+plt.figure(figsize=(12, 12))
+# 绘制安全系数热力图
+sns.heatmap(df, cmap=cmap, square=True, cbar=True, alpha=0.6)
+plt.gca().invert_yaxis()
+
+# 绘制路径地图
+plt.imshow(map.getMap(), cmap='binary', interpolation='nearest', vmin=0, vmax=3, alpha=0.4)
+plt.scatter(dest[0], dest[1], color='purple', s=50, marker='x', label='End')
+for i, source in enumerate(source_coordinates):
+    plt.scatter(source[0], source[1], color='blue', s=50, marker='o', label=f'Start {i + 1}')
+    if all_paths[i]:
+        path_array = np.array(all_paths[i])
+        plt.plot(path_array[:, 0], path_array[:, 1], linewidth=3, label=f'Path {i + 1}')
+
+plt.legend()
+plt.title('Map with Paths and Safety Factor Heatmap')
+plt.xticks([])
+plt.yticks([])
+
+plt.show()
