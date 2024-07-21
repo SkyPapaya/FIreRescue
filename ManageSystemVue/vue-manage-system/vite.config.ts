@@ -4,7 +4,14 @@ import VueSetupExtend from 'vite-plugin-vue-setup-extend';
 import AutoImport from 'unplugin-auto-import/vite';
 import Components from 'unplugin-vue-components/vite';
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers';
+
+
+
 export default defineConfig({
+	build: {
+		chunkSizeWarningLimit: 16000
+	},
+
 	base: './',
 	plugins: [
 		vue(),
@@ -18,5 +25,7 @@ export default defineConfig({
 	],
 	optimizeDeps: {
 		include: ['schart.js']
-	}
+	},
+
+
 });

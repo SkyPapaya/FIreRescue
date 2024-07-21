@@ -11,7 +11,13 @@ const chart = ref<HTMLDivElement | null>(null);
 let now = new Date();
 let data: any[] = [];
 let xAxisData: string[] = [];
-let option: echarts.EChartsOption;
+let option: {
+  yAxis: { min: number; max: number; splitLine: { show: boolean }; type: string; boundaryGap: [number, string] };
+  xAxis: { data: string[]; splitLine: { show: boolean }; type: string };
+  series: { showSymbol: boolean; data: any[]; lineStyle: { color: string }; name: string; type: string }[];
+  tooltip: { formatter: (params) => string; axisPointer: { animation: boolean }; trigger: string };
+  title: { text: string }
+};
 let breathRate;
 
 // 生成带有轻微波动的数据

@@ -96,6 +96,7 @@ onMounted(() => {
       }
     ]
   };
+  /*
   myChart.on('updateAxisPointer', function (event) {
     const xAxisInfo = event.axesInfo[0];
     if (xAxisInfo) {
@@ -114,6 +115,7 @@ onMounted(() => {
       });
     }
   });
+  */
   myChart.setOption(option);
 
   // 页面销毁时清除定时器

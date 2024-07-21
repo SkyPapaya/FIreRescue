@@ -5,10 +5,27 @@
 <script setup lang="ts">
 import {ref, onMounted} from 'vue';
 import * as echarts from 'echarts';
+import {LinearGradient} from "echarts/types/dist/shared";
 
 type EChartsOption = echarts.EChartsOption;
 
-let option: EChartsOption;
+let option: {
+  yAxis: { type: string; boundaryGap: [number, string] };
+  xAxis: { data: any[]; type: string; boundaryGap: boolean };
+  series: {
+    symbol: string;
+    areaStyle: { color: LinearGradient };
+    data: number[];
+    sampling: string;
+    name: string;
+    itemStyle: { color: string };
+    type: string
+  }[];
+  tooltip: { trigger: string; position: (pt) => [number, string] };
+  toolbox: { feature: { saveAsImage: {}; restore: {}; dataZoom: { yAxisIndex: string } } };
+  dataZoom: ({ start: number; end: number; type: string } | { start: number; end: number })[];
+  title: { left: string; text: string }
+};
 
 let base = +new Date();
 let oneDay = 24 * 3600 * 1000;

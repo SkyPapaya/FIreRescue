@@ -8,7 +8,17 @@ import * as echarts from 'echarts';
 import service from "../utils/request";
 
 type EChartsOption = echarts.EChartsOption;
-let option: EChartsOption;
+let option: {
+  series: {
+    data: { name: string; value: string }[];
+    name: string;
+    progress: { show: boolean };
+    detail: { formatter: string; textStyle: { fontSize: number } };
+    type: string
+  }[];
+  tooltip: { formatter: string };
+  title: { left: string; text: string; textStyle: { color: string; fontSize: number } }
+};
 const chart = ref<HTMLDivElement | null>(null);
 
 let signalStrength;

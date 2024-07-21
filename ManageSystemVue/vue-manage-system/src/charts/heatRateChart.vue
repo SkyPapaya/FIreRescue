@@ -16,7 +16,21 @@ let data: any[] = [];
 // 初始化 x 轴数据数组
 let xAxisData: string[] = [];
 // 初始化 echarts 选项
-let option: echarts.EChartsOption;
+let option: {
+  yAxis: { min: number; max: number; splitLine: { show: boolean }; type: string; boundaryGap: [number, string] };
+  xAxis: { data: string[]; splitLine: { show: boolean }; type: string };
+  series: {
+    symbol: string;
+    showSymbol: boolean;
+    data: any[];
+    lineStyle: { color: string };
+    symbolSize: number;
+    name: string;
+    type: string
+  }[];
+  tooltip: { formatter: (params) => string; axisPointer: { animation: boolean }; trigger: string };
+  title: { text: string }
+};
 
 // 定义心率变量
 let heartRate;

@@ -1,5 +1,4 @@
 package com.skypapaya.firerescuemanagesystem.service;
-
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.skypapaya.firerescuemanagesystem.DAO.EnvironmentDAO;
@@ -7,14 +6,9 @@ import com.skypapaya.firerescuemanagesystem.DAO.VitalSignsDAO;
 import com.skypapaya.firerescuemanagesystem.DO.EnvironmentDO;
 import com.skypapaya.firerescuemanagesystem.DO.VitalSignsDO;
 import com.skypapaya.firerescuemanagesystem.model.MqttSign;
-import org.apache.ibatis.io.Resources;
-import org.apache.ibatis.session.SqlSession;
-import org.apache.ibatis.session.SqlSessionFactory;
-import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 import org.eclipse.paho.client.mqttv3.*;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 
-import java.io.InputStream;
 
 public class MqttPostPropertyMessageListener implements IMqttMessageListener {
     private  VitalSignsDAO vitalSignsDAO;
@@ -58,14 +52,14 @@ public class MqttPostPropertyMessageListener implements IMqttMessageListener {
     }
 
     public void getMessage() {
-        String productKey = "k0yvucnhaHD";
+        String productKey = "e439ecb6405902cad3dc69015ce9ef247d2f585053feea11f457fd1867d7daa5";
         String deviceName = "java_server_01";
         String deviceSecret = "63f97e57a1ac4590d048c461c9e0de22";
 
         MqttSign sign = new MqttSign();
         sign.calculate(productKey, deviceName, deviceSecret);
 
-        String port = "443";
+        String port = "8883";
         String broker = "ssl://" + productKey + ".iot-as-mqtt.cn-shanghai.aliyuncs.com" + ":" + port;
         MemoryPersistence persistence = new MemoryPersistence();
 

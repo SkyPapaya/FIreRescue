@@ -159,7 +159,7 @@ const pageTotal = ref(0);
 
 const getData = async () => {
   const res = await fetchData();
-  tableData.value = res.data.list;
+  //tableData.value = res.data.list;
   pageTotal.value = res.data.pageTotal || 50;
 };
 
@@ -176,7 +176,7 @@ const handlePageChange = (val: number) => {
 const visible = ref(false);
 let idx: number = -1;
 const idEdit = ref(false);
-const rowData = ref<TableItem>({});
+const rowData = ref<TableItem>();
 const handleEdit = (index: number, row: TableItem) => {
   idx = index;
   rowData.value = row;

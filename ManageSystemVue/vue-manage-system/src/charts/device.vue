@@ -10,7 +10,21 @@ import {ElNotification} from "element-plus";
 
 const chart = ref<HTMLDivElement | null>(null);
 type EChartsOption = echarts.EChartsOption;
-let option: EChartsOption = {
+let option: {
+  yAxis: { min: number; max: number };
+  xAxis: { axisLabel: { rotate: number; interval: number }; type: string };
+  series: {
+    encode: { x: string; y: string };
+    datasetIndex: number;
+    itemStyle: { color: (params: any) => (string) };
+    type: string
+  };
+  tooltip: { formatter: (params) => string; axisPointer: { type: string }; trigger: string };
+  title: { text: string };
+  dataset: ({ source: (string | number)[][]; dimensions: string[] } | {
+    transform: { type: string; config: { dimension: string; order: string } }
+  })[]
+} = {
   title: {
     text: '设备数据'
   },
@@ -95,6 +109,7 @@ const load = () => {
     co = res.data[0].co;
     smoke = res.data[0].smoke;
     // 替换数据
+    /*
     option.dataset[0].source = [
       ['湿度', humidity],
       ['温度', temperature],
@@ -102,6 +117,8 @@ const load = () => {
       ['有害气体浓度', co],
       ['烟雾浓度', smoke],
     ];
+    */
+
   });
 }
 
@@ -113,7 +130,7 @@ onMounted(() => {
   setInterval(() => {
     load();
     // 根据第二个数据排序
-    option.dataset[0].source.sort((a: any, b: any) => b[1] - a[1]);
+    //option.dataset[0].source.sort((a: any, b: any) => b[1] - a[1]);
     // 更新图表
     myChart.setOption(option);
     //弹窗设置
