@@ -12,12 +12,12 @@ import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 
 
 public class HuaweiCloudMQTT {
-    private VitalSignsDAO vitalSignsDAO;
+    //private VitalSignsDAO vitalSignsDAO;
     private EnvironmentDAO environmentDAO;
     private String data;
 
     public HuaweiCloudMQTT(VitalSignsDAO vitalSignsDAO, EnvironmentDAO environmentDAO) {
-        this.vitalSignsDAO = vitalSignsDAO;
+       // this.vitalSignsDAO = vitalSignsDAO;
         this.environmentDAO = environmentDAO;
     }
 
@@ -51,51 +51,56 @@ public class HuaweiCloudMQTT {
             // 订阅主题
             client.subscribe(topic, qos);
             client.setCallback(new MqttCallback() {
+
+
                 @Override
-                public void connectionLost(Throwable cause) {
-                    System.out.println("Connection lost! " + cause);
+                public void connectionLost(Throwable throwable) {
+
                 }
 
                 //消息内容
                 @Override
-                public void messageArrived(String topic, MqttMessage message) throws Exception {
-                    //System.out.println(new String(message.getPayload()));
-                    data = new String(message.getPayload());
+                public void messageArrived(String topic, MqttMessage message) {
+                    try {
+                        // 解析消息
+                        data = new String(message.getPayload());
 
-                    JSONObject jsonObject = JSON.parseObject(data);
-                    JSONArray servicesArray = jsonObject.getJSONArray("services");
-                    if (servicesArray != null && !servicesArray.isEmpty()) {
-                        JSONObject serviceObject = servicesArray.getJSONObject(0);
-                        JSONObject propertiesObject = serviceObject.getJSONObject("properties");
+                        // 打印收到的数据
+                        System.out.println("Received data: " + data);
 
-                        //System.out.println(data);
-                        // 获取各个属性的值
-                        float smoke = propertiesObject.getFloatValue("smoke");
-                        float co = propertiesObject.getFloatValue("CO");
-                        float fire = propertiesObject.getFloatValue("FIRE");
-                        int people = propertiesObject.getIntValue("people");
-                        float temperature = propertiesObject.getFloatValue("temperature");
-                        float humidity = propertiesObject.getFloatValue("Humidity");
+                        // 尝试将字符串解析为 JSON 对象
+                        JSONObject jsonObject = JSON.parseObject(data);
+                        JSONArray servicesArray = jsonObject.getJSONArray("services");
 
-                        // 输出结果
-                        /*
-                        System.out.println("Smoke: " + smoke);
-                        System.out.println("CO: " + co);
-                        System.out.println("FIRE: " + fire);
-                        System.out.println("People: " + people);
-                        System.out.println("Temperature: " + temperature);
-                        System.out.println("Humidity: " + humidity);
+                        if (servicesArray != null && !servicesArray.isEmpty()) {
+                            JSONObject serviceObject = servicesArray.getJSONObject(0);
+                            JSONObject propertiesObject = serviceObject.getJSONObject("properties");
 
-                         */
-                        //risk是否删除
-                        float risk = 0;
-                        EnvironmentDO environmentDO = new EnvironmentDO(co, fire, humidity, risk, smoke, temperature);
-                        environmentDAO.insertEnvironmentDO(environmentDO);
-                    } else {
-                        System.out.println("No services found in the JSON data.");
+                            // 获取各个属性的值并处理
+                            float smoke = propertiesObject.getFloatValue("smoke");
+                            float co = propertiesObject.getFloatValue("CO");
+                            float fire = propertiesObject.getFloatValue("FIRE");
+                            int people = propertiesObject.getIntValue("people");
+                            float temperature = propertiesObject.getFloatValue("temperature");
+                            float humidity = propertiesObject.getFloatValue("Humidity");
+
+                            // 插入数据库
+                            EnvironmentDO environmentDO = new EnvironmentDO(co, fire, humidity, 0, smoke, temperature);
+                            environmentDAO.insertEnvironmentDO(environmentDO);
+
+                            System.out.println("Environment data inserted successfully.");
+                        } else {
+                            System.out.println("No services found in the JSON data.");
+                        }
+                    } catch (ClassCastException e) {
+                        System.out.println("ClassCastException caught: " + e.getMessage());
+                        e.printStackTrace();  // 打印堆栈信息
+                    } catch (Exception e) {
+                        System.out.println("Exception caught: " + e.getMessage());
+                        e.printStackTrace();  // 打印堆栈信息
                     }
-                    //System.out.println(servicesArray);
                 }
+
 
                 @Override
                 public void deliveryComplete(IMqttDeliveryToken token) {

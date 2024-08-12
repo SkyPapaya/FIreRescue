@@ -102,14 +102,14 @@ let smoke;
 //获取数据
 const load = () => {
   service.get('environment/getTheLatest').then((res) => {
-   // console.log(res.data[0].co);
+   console.log(res.data[0].co);
     humidity = res.data[0].humidity;
     temperature = res.data[0].temperature;
     fire = res.data[0].fire * 100;
     co = res.data[0].co;
     smoke = res.data[0].smoke;
     // 替换数据
-    /*
+
     option.dataset[0].source = [
       ['湿度', humidity],
       ['温度', temperature],
@@ -117,7 +117,7 @@ const load = () => {
       ['有害气体浓度', co],
       ['烟雾浓度', smoke],
     ];
-    */
+
 
   });
 }

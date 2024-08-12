@@ -26,6 +26,19 @@ export default defineConfig({
 	optimizeDeps: {
 		include: ['schart.js']
 	},
+	//跨域代理
+	server:{
+		//端口号
+		port: 5173,
+		proxy: {
+			// 代理所有以 /api 开头的请求
+			'/api': {
+				target: 'http://localhost:8080', // 你的后端 API 地址
+				changeOrigin: true,
+				rewrite: (path) => path.replace(/^\/api/, ''), // 可选：移除 /api 前缀
+			},
+		},
+	},
 
 
 });

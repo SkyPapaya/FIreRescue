@@ -1,7 +1,7 @@
 import axios, {AxiosInstance, AxiosError, AxiosResponse, AxiosRequestConfig} from 'axios';
 
 const service: AxiosInstance = axios.create({
-    baseURL: 'http://106.14.144.103:8080', // 只需指定主机名和端口号
+    baseURL: 'http://localhost:8080', // 只需指定主机名和端口号
     timeout: 5000
 });
 
