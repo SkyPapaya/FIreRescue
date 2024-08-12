@@ -34,7 +34,7 @@ public class FireRescueManageSystemApplication implements ApplicationRunner {
     public void run(ApplicationArguments args) throws Exception {
 //        MqttPostPropertyMessageListener mqttPostPropertyMessageListener = new MqttPostPropertyMessageListener(vitalSignsDAO,environmentDAO);
 //        mqttPostPropertyMessageListener.getMessage();
-        HuaweiCloudMQTT huaweiCloudMQTT = new HuaweiCloudMQTT();
+        HuaweiCloudMQTT huaweiCloudMQTT = new HuaweiCloudMQTT(vitalSignsDAO,environmentDAO);
         //huaweiCloudMQTT.saveInf();
         huaweiCloudMQTT.getInf();
 

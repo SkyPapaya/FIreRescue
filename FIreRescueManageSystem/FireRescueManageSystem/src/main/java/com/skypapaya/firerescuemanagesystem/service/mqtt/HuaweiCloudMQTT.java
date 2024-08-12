@@ -16,6 +16,12 @@ public class HuaweiCloudMQTT {
     private EnvironmentDAO environmentDAO;
     private String data;
 
+    public HuaweiCloudMQTT(VitalSignsDAO vitalSignsDAO, EnvironmentDAO environmentDAO) {
+        this.vitalSignsDAO = vitalSignsDAO;
+        this.environmentDAO = environmentDAO;
+    }
+
+
 
     public void getInf() {
 
@@ -62,7 +68,7 @@ public class HuaweiCloudMQTT {
                         JSONObject serviceObject = servicesArray.getJSONObject(0);
                         JSONObject propertiesObject = serviceObject.getJSONObject("properties");
 
-                        System.out.println(data);
+                        //System.out.println(data);
                         // 获取各个属性的值
                         float smoke = propertiesObject.getFloatValue("smoke");
                         float co = propertiesObject.getFloatValue("CO");
