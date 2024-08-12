@@ -5,6 +5,9 @@ const service: AxiosInstance = axios.create({
     timeout: 5000
 });
 
+//可能出现错误
+
+// @ts-ignore
 /*
 service.interceptors.request.use(
 
@@ -19,8 +22,8 @@ service.interceptors.request.use(
         return Promise.reject(error);
     }
 );
+*/
 
- */
 
 
 

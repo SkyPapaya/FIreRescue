@@ -89,6 +89,15 @@ const routes: RouteRecordRaw[] = [
 
             },
             {
+                path: '/map',
+                name: 'map',
+                meta: {
+                    title: '逃生路线',
+                    permiss: '1',
+                },
+                component: () => import(/* webpackChunkName: "dashboard" */ '../views/map.vue'),
+            },
+            {
                 path: '/permission',
                 name: 'permission',
                 meta: {

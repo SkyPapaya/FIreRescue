@@ -136,6 +136,12 @@ const items = [
     index: "/control",
     title: "设备控制",
     permiss: "15",
+  },
+  {
+    icon:"el-icon-picture-outline",
+    index: "/map",
+    title: "逃生路线",
+    permiss: "16",
   }
 ];
 

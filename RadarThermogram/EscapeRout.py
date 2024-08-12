@@ -16,7 +16,7 @@ def convert_to_binary(img):
 
 
 # 读取图像
-image_path = './image/map.png'
+image_path = 'image/source/map.png'
 image = cv2.imread(image_path)
 binary_matrix = convert_to_binary(image)
 
@@ -132,7 +132,7 @@ map = Map(WIDTH, HEIGHT, binary_matrix)
 
 
 # ---------
-def get_escape_route(dest, source_coordinates):
+def get_escape_route(dest, source_coordinates, save_path=None):
     all_paths = []
     # 生成逃生路线
     for source in source_coordinates:
@@ -171,12 +171,12 @@ def get_escape_route(dest, source_coordinates):
 
         # 绘制路径地图
         plt.imshow(map.getMap(), cmap='binary', interpolation='nearest', vmin=0, vmax=3, alpha=0.4)
-        plt.scatter(dest[0], dest[1], color='purple', s=60, marker='x', label='End')  # 修改目标点标识大小
+        plt.scatter(dest[0], dest[1], color='purple', s=280, marker='x', label='End')  # 修改目标点标识大小
         for i, source in enumerate(source_coordinates):
-            plt.scatter(source[0], source[1], color='blue', s=20, marker='o', label=f'Start {i + 1}')
+            plt.scatter(source[0], source[1], color='blue', s=90, marker='o', label=f'Start {i + 1}')
             if all_paths[i]:
                 path_array = np.array(all_paths[i])
-                plt.plot(path_array[:, 0], path_array[:, 1], linewidth=1, label=f'Path {i + 1}')
+                plt.plot(path_array[:, 0], path_array[:, 1], linewidth=4, label=f'Path {i + 1}')
 
         plt.legend()
         plt.title('Map with Paths and Safety Factor Heatmap')
@@ -184,11 +184,14 @@ def get_escape_route(dest, source_coordinates):
         plt.xlabel('X Coordinate')
         plt.ylabel('Y Coordinate')
 
+        if save_path:
+            plt.savefig(save_path)  # 保存图片到指定路径
         plt.show()
-        plt.pause(0.5)
+        plt.pause(0.01)
 
 
 # 示例调用
 dest = (150, 400)
 source_coordinates = [(290, 324), (290, 350)]
-get_escape_route(dest, source_coordinates)
+save_path = '../ManageSystemVue/vue-manage-system/src/img/map.png'  # 指定保存路径
+get_escape_route(dest, source_coordinates, save_path)

@@ -55,6 +55,7 @@ onMounted(() => {
   // 设置定时器每秒更新一次数据
   setInterval(() => {
     load();
+
     // 随机切换 actionContent 和 warningContent 的值
     const actionValues = {
       0: {value: "无人", color: "black"},
