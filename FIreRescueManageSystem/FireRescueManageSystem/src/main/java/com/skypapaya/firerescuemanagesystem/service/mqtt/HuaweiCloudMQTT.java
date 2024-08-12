@@ -81,6 +81,10 @@ public class HuaweiCloudMQTT {
                         System.out.println("Humidity: " + humidity);
 
                          */
+                        //risk是否删除
+                        float risk = 0;
+                        EnvironmentDO environmentDO = new EnvironmentDO(co, fire, humidity, risk, smoke, temperature);
+                        environmentDAO.insertEnvironmentDO(environmentDO);
                     } else {
                         System.out.println("No services found in the JSON data.");
                     }
