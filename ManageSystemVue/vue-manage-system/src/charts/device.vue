@@ -102,7 +102,7 @@ let smoke;
 //获取数据
 const load = () => {
   service.get('environment/getTheLatest').then((res) => {
-   console.log(res.data[0].co);
+   //console.log(res.data[0].co);
     humidity = res.data[0].humidity;
     temperature = res.data[0].temperature;
     fire = res.data[0].fire * 100;
@@ -121,7 +121,7 @@ const load = () => {
 
   });
 }
-
+let type = "火灾类型是：00"
 onMounted(() => {
   const myChart = echarts.init(chart.value!);
   load();

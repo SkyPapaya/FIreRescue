@@ -1,4 +1,4 @@
-package com.skypapaya.firerescuemanagesystem.service.mqtt;
+package com.skypapaya.firerescuemanagesystem.mqtt;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
@@ -6,7 +6,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.skypapaya.firerescuemanagesystem.DAO.EnvironmentDAO;
 import com.skypapaya.firerescuemanagesystem.DAO.VitalSignsDAO;
 import com.skypapaya.firerescuemanagesystem.DO.EnvironmentDO;
-import com.skypapaya.firerescuemanagesystem.DO.VitalSignsDO;
 import org.eclipse.paho.client.mqttv3.*;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 

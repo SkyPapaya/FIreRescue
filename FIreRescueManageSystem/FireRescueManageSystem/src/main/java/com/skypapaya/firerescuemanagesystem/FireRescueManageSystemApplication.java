@@ -4,7 +4,7 @@ import com.skypapaya.firerescuemanagesystem.DAO.EnvironmentDAO;
 import com.skypapaya.firerescuemanagesystem.DAO.UserDAO;
 
 import com.skypapaya.firerescuemanagesystem.DAO.VitalSignsDAO;
-import com.skypapaya.firerescuemanagesystem.service.mqtt.HuaweiCloudMQTT;
+import com.skypapaya.firerescuemanagesystem.mqtt.HuaweiCloudMQTT;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
