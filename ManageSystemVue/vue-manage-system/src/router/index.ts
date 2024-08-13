@@ -97,6 +97,15 @@ const routes: RouteRecordRaw[] = [
                 },
                 component: () => import(/* webpackChunkName: "dashboard" */ '../views/map.vue'),
             },
+
+            {
+                path:'/position',
+                name:'position',
+                meta:{
+                    title: '人员位置',
+                },
+
+            },
             {
                 path: '/permission',
                 name: 'permission',

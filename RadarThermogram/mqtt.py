@@ -144,7 +144,7 @@ def plot_positions(position_str):
     # 显示网格
     plt.grid(True)
 
-    plt.savefig("image/output/position.png")
+    plt.savefig("../ManageSystemVue/vue-manage-system/src/img/position.png")
     print("图片已刷新")
     # 显示图形
     plt.show()
