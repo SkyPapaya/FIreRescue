@@ -5,8 +5,7 @@ import pandas as pd
 import seaborn as sns
 from numpy.random import randint
 
-
-# 转换图像为二值矩阵
+# Convert image to binary matrix
 def convert_to_binary(img):
     gray_img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     _, binary_img = cv2.threshold(gray_img, 230, 255, cv2.THRESH_BINARY)
@@ -14,14 +13,12 @@ def convert_to_binary(img):
     binary_matrix = (inverted_binary_img / 255).astype(np.uint8)
     return binary_matrix
 
-
-# 读取图像
-image_path = 'image/source/map.png'
+# Read the image
+image_path = 'image/source/nju_map.png'
 image = cv2.imread(image_path)
 binary_matrix = convert_to_binary(image)
 
-
-# 初始化Map类
+# Initialize Map class
 class Map():
     def __init__(self, width, height, binary_matrix):
         self.width = width
@@ -37,8 +34,7 @@ class Map():
     def getMap(self):
         return self.map
 
-
-# A*算法找路
+# A* algorithm for pathfinding
 def AStarSearch(map, source, dest):
     class SearchEntry():
         def __init__(self, x, y, g_cost, f_cost=0, pre_entry=None):
@@ -124,22 +120,19 @@ def AStarSearch(map, source, dest):
         location = location.pre_entry
     return path[::-1]  # Reverse the path to go from source to dest
 
-
 WIDTH = binary_matrix.shape[1]
 HEIGHT = binary_matrix.shape[0]
 
 map = Map(WIDTH, HEIGHT, binary_matrix)
 
-
-# ---------
+# Generate the escape routes and move the start points along the paths
 def get_escape_route(dest, source_coordinates, save_path=None):
     all_paths = []
-    # 生成逃生路线
+    # Generate escape routes only once
     for source in source_coordinates:
         path = AStarSearch(map, source, dest)
         all_paths.append(path)
 
-    # 动态更新建筑矩阵中的安全系数
     def safety_factor(smoke, temperature, humidity):
         return temperature * 0.1 + humidity * 0.1 + smoke * 0.8
 
@@ -157,41 +150,38 @@ def get_escape_route(dest, source_coordinates, save_path=None):
     df = pd.DataFrame(binary_matrix)
     cmap = "RdYlGn_r"
 
+    # Move start points along the paths
     while any(tuple(pos) != dest for pos in source_coordinates):
         for i, path in enumerate(all_paths):
-            step = min(10, len(path))
-            source_coordinates[i] = path[step - 1]
-            all_paths[i] = path[step:]
+            if len(path) > 0:
+                step = min(20, len(path))
+                source_coordinates[i] = path[step - 1]
+                all_paths[i] = path[step:]
 
-        # 叠加图像
+        # Plot the map with paths and safety factor heatmap
         plt.figure(figsize=(12, 12))
-        # 绘制安全系数热力图
         sns.heatmap(df, cmap=cmap, square=True, cbar=True, alpha=0.6)
         plt.gca().invert_yaxis()
-
-        # 绘制路径地图
         plt.imshow(map.getMap(), cmap='binary', interpolation='nearest', vmin=0, vmax=3, alpha=0.4)
-        plt.scatter(dest[0], dest[1], color='purple', s=280, marker='x', label='End')  # 修改目标点标识大小
+        plt.scatter(dest[0], dest[1], color='purple', s=280, marker='x', label='End')
         for i, source in enumerate(source_coordinates):
             plt.scatter(source[0], source[1], color='blue', s=90, marker='o', label=f'Start {i + 1}')
-            if all_paths[i]:
+            if len(all_paths[i]) > 0:
                 path_array = np.array(all_paths[i])
                 plt.plot(path_array[:, 0], path_array[:, 1], linewidth=4, label=f'Path {i + 1}')
 
         plt.legend()
         plt.title('Map with Paths and Safety Factor Heatmap')
-
         plt.xlabel('X Coordinate')
         plt.ylabel('Y Coordinate')
 
         if save_path:
-            plt.savefig(save_path)  # 保存图片到指定路径
+            plt.savefig(save_path)
         plt.show()
         plt.pause(0.01)
 
-
-# 示例调用
-dest = (150, 400)
-source_coordinates = [(290, 324), (290, 350)]
-save_path = '../ManageSystemVue/vue-manage-system/src/img/map.png'  # 指定保存路径
+# Example usage
+dest = (736, 400)
+source_coordinates = [(256, 140), (270, 145), (275, 148), (279, 152)]
+save_path = '../ManageSystemVue/vue-manage-system/src/img/map.png'
 get_escape_route(dest, source_coordinates, save_path)

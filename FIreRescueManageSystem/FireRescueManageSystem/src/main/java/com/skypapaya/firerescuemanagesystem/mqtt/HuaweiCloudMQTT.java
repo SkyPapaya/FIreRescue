@@ -6,17 +6,18 @@ import com.alibaba.fastjson.JSONObject;
 import com.skypapaya.firerescuemanagesystem.DAO.EnvironmentDAO;
 import com.skypapaya.firerescuemanagesystem.DAO.VitalSignsDAO;
 import com.skypapaya.firerescuemanagesystem.DO.EnvironmentDO;
+import com.skypapaya.firerescuemanagesystem.DO.VitalSignsDO;
 import org.eclipse.paho.client.mqttv3.*;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 
 
 public class HuaweiCloudMQTT {
-    //private VitalSignsDAO vitalSignsDAO;
     private EnvironmentDAO environmentDAO;
+    private VitalSignsDAO vitalSignsDAO;
     private String data;
 
     public HuaweiCloudMQTT(VitalSignsDAO vitalSignsDAO, EnvironmentDAO environmentDAO) {
-       // this.vitalSignsDAO = vitalSignsDAO;
+        this.vitalSignsDAO = vitalSignsDAO;
         this.environmentDAO = environmentDAO;
     }
 
@@ -76,16 +77,32 @@ public class HuaweiCloudMQTT {
                             JSONObject propertiesObject = serviceObject.getJSONObject("properties");
 
                             // 获取各个属性的值并处理
+                            //环境信息数据
                             float smoke = propertiesObject.getFloatValue("smoke");
                             float co = propertiesObject.getFloatValue("CO");
                             float fire = propertiesObject.getFloatValue("FIRE");
-                            int people = propertiesObject.getIntValue("people");
                             float temperature = propertiesObject.getFloatValue("temperature");
                             float humidity = propertiesObject.getFloatValue("Humidity");
+                            //生命体征数据
+                            float breathRate = propertiesObject.getFloatValue("BreathRate");
+
+                            Integer heartRate = propertiesObject.getInteger("HeartRate");
+                            float signalStrength = propertiesObject.getFloatValue("SignalStrength");
+
+
+                            Integer active = propertiesObject.getInteger("active");
+                            Integer distance = propertiesObject.getInteger("distance");
+                            Integer exist = propertiesObject.getInteger("exist");
+                            Integer life = propertiesObject.getInteger("life");
+                            Integer people = propertiesObject.getInteger("people");
+
+                            System.out.println(life);
 
                             // 插入数据库
                             EnvironmentDO environmentDO = new EnvironmentDO(co, fire, humidity, 0, smoke, temperature);
                             environmentDAO.insertEnvironmentDO(environmentDO);
+                            VitalSignsDO vitalSignsDO = new VitalSignsDO( breathRate,heartRate,  signalStrength,  active,  distance,  exist,  life,  people);
+                            vitalSignsDAO.insertVitalSignsDO(vitalSignsDO);
 
                             System.out.println("Environment data inserted successfully.");
                         } else {
@@ -93,10 +110,10 @@ public class HuaweiCloudMQTT {
                         }
                     } catch (ClassCastException e) {
                         System.out.println("ClassCastException caught: " + e.getMessage());
-                        e.printStackTrace();  // 打印堆栈信息
+                        //e.printStackTrace();  // 打印堆栈信息
                     } catch (Exception e) {
                         System.out.println("Exception caught: " + e.getMessage());
-                        e.printStackTrace();  // 打印堆栈信息
+                        //e.printStackTrace();  // 打印堆栈信息
                     }
                 }
 

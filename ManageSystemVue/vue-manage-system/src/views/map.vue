@@ -1,7 +1,7 @@
 <template>
 
  <div class="map">
-   <img  src="../img/map.png">/>
+   <img  src="../img/map.png" :key="imageKey">/>
  </div>
 </template>
 
@@ -13,14 +13,30 @@
 }
 </style>
 <script>
-import {onMounted} from "vue";
+import { ref, onMounted } from "vue";
 
-onMounted(() => {
-  // 设置定时器每秒更新一次数据
-  setInterval(() => {
-    load();
-    console.log("2")
-  }, 1000);
-});
+export default {
+  setup() {
+    const imageSrc = ref("");
+    const imageKey = ref("");
+    const load = () => {
+      // Appending a timestamp to force the browser to reload the image
+      imageSrc.value = `../img/map.png?timestamp=${new Date().getTime()}`;
+      imageKey.value = new Date().getTime();
+    };
 
+    onMounted(() => {
+      load(); // Initial load
+      // Set interval to update the image source every 100ms
+      setInterval(() => {
+        location.reload();
+        console.log("refresh")
+      }, 3000);
+    });
+
+    return {
+      imageSrc,
+    };
+  },
+};
 </script>

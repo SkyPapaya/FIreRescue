@@ -120,9 +120,9 @@ public class VitalSignsDO {
     }
 
 
-    public VitalSignsDO(float breathRate, Integer heatRate, float signalStrength, Integer active, Integer distance, Integer exist, Integer life, Integer people) {
+    public VitalSignsDO(float breathRate, Integer heartRate, float signalStrength, Integer active, Integer distance, Integer exist, Integer life, Integer people) {
         this.breathRate = breathRate;
-        this.heartRate = heatRate;
+        this.heartRate = heartRate;
         this.signalStrength = signalStrength;
         this.active = active;
         this.distance = distance;
