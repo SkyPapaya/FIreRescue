@@ -14,7 +14,7 @@ def convert_to_binary(img):
     return binary_matrix
 
 # Read the image
-image_path = 'image/source/nju_map.png'
+image_path = "D:\\Code\\FireRescue\\FireRescue\\RadarThermogram\\image\\source\\nju_map.png"
 image = cv2.imread(image_path)
 binary_matrix = convert_to_binary(image)
 
@@ -177,11 +177,11 @@ def get_escape_route(dest, source_coordinates, save_path=None):
 
         if save_path:
             plt.savefig(save_path)
-        plt.show()
-        plt.pause(0.01)
+        #plt.show()
+        #plt.pause(0.01)
 
 # Example usage
 dest = (736, 400)
 source_coordinates = [(256, 140), (270, 145), (275, 148), (279, 152)]
-save_path = '../ManageSystemVue/vue-manage-system/src/img/map.png'
+save_path = 'D:\\Code\\FireRescue\\FireRescue\\ManageSystemVue\\vue-manage-system\\src\\img\\map.png'
 get_escape_route(dest, source_coordinates, save_path)

@@ -76,4 +76,4 @@ plt.figure(figsize=(12, 12))  # 设置图像大小
 sns.heatmap(df, cmap=cmap, square=True, cbar=True)  # 绘制热力图
 
 plt.gca().invert_yaxis()  # 反转y轴，使(0,0)在左上角
-plt.show()  # 显示图像
+#plt.show()  # 显示图像

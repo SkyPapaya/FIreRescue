@@ -55,4 +55,4 @@ plt.axvline(0, color='black', linewidth=0.8, linestyle='--')  # x=0 轴
 plt.grid(True)
 
 # 显示图形  
-plt.show()
+#plt.show()

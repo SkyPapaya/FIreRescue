@@ -147,7 +147,7 @@ def plot_positions(position_str):
     plt.savefig("../ManageSystemVue/vue-manage-system/src/img/position.png")
     print("图片已刷新")
     # 显示图形
-    plt.show()
+    #plt.show()
 
 
 # 使用函数时，将 position_str 作为参数传递
