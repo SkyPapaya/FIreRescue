@@ -138,17 +138,10 @@ const items = [
     permiss: "15",
   },
   {
-    icon:"Tools",
+    icon:"el-icon-picture-outline",
     index: "/map",
     title: "逃生路线",
     permiss: "16",
-  },
-  {
-    icon: "Tools",
-    index:"/position",
-    title: "人员位置",
-    permiss: "16",
-
   }
 ];
 

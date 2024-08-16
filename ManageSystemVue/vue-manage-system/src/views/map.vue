@@ -1,29 +1,15 @@
 <template>
-<div class="map-container">
+
  <div class="map">
-   <img  src="../img/map.png" :key="imageKey">
+   <img  src="../img/map.png" :key="imageKey">/>
  </div>
-  <div class="position" >
-    <img  src="../img/position.png" :key="imageKey" />
-  </div>
-</div>
 </template>
 
 <style>
-.map-container{
-  display: flex;
-}
 .map{
-  display: flex;
-  border-left: 150px;
-  height: 500px;
-  width: 600px;
-}
-.position{
-  display: flex;
-  border-left: 50px ;
-  height: 500px;
-  width: 600px;
+
+  height: 60px;
+  width: 60px;
 }
 </style>
 <script>
